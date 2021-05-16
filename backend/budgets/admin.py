@@ -1,7 +1,27 @@
+from django import forms
 from django.contrib import admin
 
 from budgets.models import Budget, Expense, Income
 
-admin.site.register(Budget)
+
+class BudgetAdminForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["shared_with"].queryset = self.fields[
+            "shared_with"
+        ].queryset.exclude(pk=self.user.pk)
+
+
+class BudgetAdmin(admin.ModelAdmin):
+    form = BudgetAdminForm
+
+    def get_form(self, request, *args, **kwargs):
+        form = super().get_form(request, *args, **kwargs)
+        form.user = request.user
+        return form
+
+
+admin.site.register(Budget, BudgetAdmin)
 admin.site.register(Income)
 admin.site.register(Expense)
