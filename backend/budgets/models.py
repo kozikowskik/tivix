@@ -14,6 +14,7 @@ class Budget(models.Model):
 
 class Income(models.Model):
     name = models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -24,6 +25,7 @@ class Income(models.Model):
 
 class Expense(models.Model):
     name = models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
