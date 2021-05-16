@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  backend:
+    env_file: ./.env
+    build:
+      context: backend
+      target: production
+    ports:
+      - "8000:8000"
+
+  database:
+    env_file: ./.env
+    image: postgres:13
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
