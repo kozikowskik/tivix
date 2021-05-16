@@ -28,7 +28,7 @@ SECRET_KEY = env.get("APP_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.get("APP_DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.get("APP_ALLOWED_HOSTS").split(" ")
 
 
 # Application definition
