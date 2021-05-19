@@ -1,19 +1,17 @@
 import './App.css';
 
-import { Container, Row, Col } from 'reactstrap';
 import Login from './components/login.component.js';
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function App() {
     return (
-        <div className="App">
-            <Container>
-                <Row>
-                    <Col sm="12" md={{ size: 5, offset: 4  }}>
-                        <Login />
-                    </Col>
-                </Row>
-            </Container>
-        </div>
+        <Router>
+            <div className="App">
+                <Switch>
+                    <Route exact path='/' component={Login} />
+                </Switch>
+            </div>
+        </Router>
     );
 }
 

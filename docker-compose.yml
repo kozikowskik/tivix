@@ -6,11 +6,15 @@ services:
     build:
       context: backend
       target: production
+    depends_on:
+      - "database"
 
   frontend:
     env_file: ./env
     build:
       context: frontend
+    depends_on:
+      - "backend"
 
   database:
     env_file: ./env
