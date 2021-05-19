@@ -15,7 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework_simplejwt.views import TokenObtainPairView
+from django.conf.urls.static import static
+from django.conf import settings
+
+
+from authentication import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-]
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("login/", views.LoginView.as_view()),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

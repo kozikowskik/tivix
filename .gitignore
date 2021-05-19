@@ -1,5 +1,2 @@
-.env
-
-docker-compose.override.yml
-
-database/data/
+env
+database
