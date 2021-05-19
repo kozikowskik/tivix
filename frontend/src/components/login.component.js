@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Container, Col, Row, Form, FormGroup, Label, Input, Card, CardTitle, CardText, Button } from 'reactstrap';
-import axios from "axios";
+import API from  "../api.js";
 
 export default class Login extends Component {
     constructor(props) {
@@ -29,10 +29,13 @@ export default class Login extends Component {
             this.setState({input:input});
             //Call backend
             //backend
-            axios.post('api/token/')
+            API.post('/api/token/')
                 .then(res => {
                     console.log(res);
                 })
+                .catch(res => {
+                    console.log(res);
+                });
         }
     }
     validate(){
