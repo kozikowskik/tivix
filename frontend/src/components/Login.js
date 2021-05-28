@@ -6,7 +6,7 @@ export default class Login extends Component {
     constructor(props) {
         super(props)
 
-        localStorage.clear();
+        //localStorage.clear();
 
         this.state = {
             input: {},
@@ -37,6 +37,7 @@ export default class Login extends Component {
         }).then(res => {
             localStorage.setItem('jwtAccessToken', res.data.access);
             localStorage.setItem('jwtRefreshToken', res.data.refresh);
+
             this.props.history.push(this.successUrl);
         }).catch((res) => {
             this.setState({

@@ -4,8 +4,9 @@ import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-ro
 import PrivateRoute from './routers/privateRoute.router.js';
 
 import Login from './components/Login.js';
-import Budget from './components/Budget.js';
+import Budgets from './components/Budgets.js';
 import AddBudget from './components/AddBudget.js';
+import EditBudget from './components/EditBudget.js';
 
 
 function isAuthenticated () {
@@ -22,8 +23,9 @@ function App() {
                     <Route exact path='/' exact render={(props) => (
                         <Login {...props} successUrl={"/budgets"} />
                     )} />
-                    <PrivateRoute authed={isAuthenticated()} path="/budgets/add" component={AddBudget} />
-                    <PrivateRoute authed={isAuthenticated()} path="/budgets" component={Budget} />
+                    <PrivateRoute exact authed={isAuthenticated()} path="/budgets" component={Budgets} />
+                    <PrivateRoute exact authed={isAuthenticated()} path="/budgets/add" component={AddBudget} />
+                    <PrivateRoute exact authed={isAuthenticated()} path="/budgets/edit/:id" component={EditBudget} />
 
                     <Redirect to="/" />
                 </Switch>

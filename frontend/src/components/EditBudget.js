@@ -2,9 +2,11 @@ import React, { Component } from "react";
 import { Container, Col, Row, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import API from  "../api.js";
 
-export default class AddBudget extends Component {
+export default class EditBudget extends Component {
     constructor(props) {
         super(props)
+
+        this.budgetId = this.props.match.params.id;
 
         this.state = {
             input: {},
@@ -12,6 +14,24 @@ export default class AddBudget extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    getBudget() {
+        API.get(`/api/budgets/${this.budgetId}`).then(res => {
+            if (res.status !== 201) {
+                this.state["errors"]["form"] = res.data.details;
+            }
+            this.setState({
+                input: {name: res.data.name}
+            })
+        }).catch((res) => {
+            this.setState({
+                errors: {form: res.response.data.detail}
+            })
+        });
+    }
+    componentDidMount() {
+        this.getBudget()
     }
     handleChange(event) {
         let input = this.state.input;
@@ -26,19 +46,18 @@ export default class AddBudget extends Component {
             return false;
         }
         let input = {};
-
-        API.post('/api/budgets', {
+        API.put(`/api/budgets/${this.budgetId}`, {
             name: this.state.input['name'],
         }).then(res => {
-            if (res.status === 201) {
-                this.props.history.push('/budgets');
+            if (res.status !== 201) {
+                this.state["errors"]["form"] = res.data.details;
             }
+            this.props.history.push('/budgets');
         }).catch((res) => {
             this.setState({
                 errors: {form: res.response.data.detail}
             })
         });
-
         input["name"] = "";
         this.setState({input:input});
     }
@@ -57,6 +76,7 @@ export default class AddBudget extends Component {
         });
         return isValid;
     }
+
     render() {
         return (
             <Container>
@@ -66,7 +86,7 @@ export default class AddBudget extends Component {
                         <Form method="post" onSubmit={this.handleSubmit} noValidate>
                             <FormGroup>
                                 <Label for="name">Name</Label>
-                                <Input type="text" name="name" id="name" onChange={this.handleChange} />
+                                <Input type="text" name="name" id="name" value={this.state.input.name} onChange={this.handleChange} />
                                 <div className="text-danger">{this.state.errors.name}</div>
                             </FormGroup>
                             <FormGroup>

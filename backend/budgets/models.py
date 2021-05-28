@@ -10,6 +10,9 @@ class Budget(models.Model):
 
     shared_with = models.ManyToManyField(User, related_name="shared_with_users")
 
+    class Meta:
+        ordering = ["-pk"]
+
     def __str__(self):
         return self.name
 
