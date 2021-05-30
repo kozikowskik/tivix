@@ -1,31 +1,63 @@
-import './App.css';
+import "./App.css";
 
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
-import PrivateRoute from './routers/privateRoute.router.js';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+    Redirect,
+} from "react-router-dom";
+import PrivateRoute from "./routers/privateRoute.router.js";
 
-import Login from './components/Login.js';
-import Budgets from './components/Budgets.js';
-import AddBudget from './components/AddBudget.js';
-import EditBudget from './components/EditBudget.js';
+import Login from "./components/Login.js";
+import Dashboard from "./components/Dashboard.js";
+import Budgets from "./components/Budgets.js";
+import AddBudget from "./components/AddBudget.js";
+import EditBudget from "./components/EditBudget.js";
 
-
-function isAuthenticated () {
-    let jwtAccessToken = localStorage.getItem('jwtAccessToken')
+function isAuthenticated() {
+    let jwtAccessToken = localStorage.getItem("jwtAccessToken");
     return jwtAccessToken ? true : false;
 }
-
 
 function App() {
     return (
         <Router>
             <div className="App">
                 <Switch>
-                    <Route exact path='/' exact render={(props) => (
-                        <Login {...props} successUrl={"/budgets"} />
-                    )} />
-                    <PrivateRoute exact authed={isAuthenticated()} path="/budgets" component={Budgets} />
-                    <PrivateRoute exact authed={isAuthenticated()} path="/budgets/add" component={AddBudget} />
-                    <PrivateRoute exact authed={isAuthenticated()} path="/budgets/edit/:id" component={EditBudget} />
+                    <Route
+                        exact
+                        path="/"
+                        exact
+                        render={(props) => (
+                            <Login {...props} successUrl={"/dashboard"} />
+                        )}
+                    />
+                    <PrivateRoute
+                        exact
+                        authed={isAuthenticated()}
+                        path="/dashboard"
+                        component={Dashboard}
+                    />
+
+                    <PrivateRoute
+                        exact
+                        authed={isAuthenticated()}
+                        path="/budgets"
+                        component={Budgets}
+                    />
+                    <PrivateRoute
+                        exact
+                        authed={isAuthenticated()}
+                        path="/budgets/add"
+                        component={AddBudget}
+                    />
+                    <PrivateRoute
+                        exact
+                        authed={isAuthenticated()}
+                        path="/budgets/edit/:id"
+                        component={EditBudget}
+                    />
 
                     <Redirect to="/" />
                 </Switch>

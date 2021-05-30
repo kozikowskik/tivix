@@ -5,13 +5,9 @@ import {
     Row,
     Form,
     FormGroup,
-    Label,
-    Input,
     Card,
-    CardTitle,
-    CardText,
     Button,
-} from "reactstrap";
+} from "react-bootstrap";
 import API from "../api.js";
 
 export default class Login extends Component {
@@ -97,44 +93,50 @@ export default class Login extends Component {
             <Container>
                 <Row>
                     <Col sm="12" md={{ size: 5, offset: 4 }}>
-                        <Card body outline color="secondary">
-                            <CardTitle tag="h5">Sign In</CardTitle>
-                            <div className="text-danger">
-                                {this.state.errors.form}
-                            </div>
-                            <Form
-                                method="post"
-                                onSubmit={this.handleSubmit}
-                                noValidate
-                            >
-                                <FormGroup>
-                                    <Label for="login">Login</Label>
-                                    <Input
-                                        type="text"
-                                        name="username"
-                                        id="username"
-                                        onChange={this.handleChange}
-                                    />
-                                    <div className="text-danger">
-                                        {this.state.errors.email}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <Label for="password">Password</Label>
-                                    <Input
-                                        type="password"
-                                        name="password"
-                                        id="password"
-                                        onChange={this.handleChange}
-                                    />
-                                    <div className="text-danger">
-                                        {this.state.errors.password}
-                                    </div>
-                                </FormGroup>
-                                <FormGroup>
-                                    <Button>Submit</Button>
-                                </FormGroup>
-                            </Form>
+                        <Card border="primary">
+                            <Card.Header>Sign In</Card.Header>
+                            <Card.Body>
+                                <div className="text-danger">
+                                    {this.state.errors.form}
+                                </div>
+                                <Form
+                                    method="post"
+                                    onSubmit={this.handleSubmit}
+                                    noValidate
+                                >
+                                    <FormGroup>
+                                        <Form.Label for="login">
+                                            Login
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            name="username"
+                                            id="username"
+                                            onChange={this.handleChange}
+                                        />
+                                        <div className="text-danger">
+                                            {this.state.errors.email}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Form.Label for="password">
+                                            Password
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="password"
+                                            name="password"
+                                            id="password"
+                                            onChange={this.handleChange}
+                                        />
+                                        <div className="text-danger">
+                                            {this.state.errors.password}
+                                        </div>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Button type="submit">Submit</Button>
+                                    </FormGroup>
+                                </Form>
+                            </Card.Body>
                         </Card>
                     </Col>
                 </Row>

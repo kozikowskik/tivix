@@ -1,14 +1,23 @@
 import React, { Component } from "react";
-import { Container, Col, Row, Form, FormGroup, Label, Input, Button } from 'reactstrap';
-import API from  "../api.js";
+import {
+    Container,
+    Col,
+    Row,
+    Form,
+    FormGroup,
+    Label,
+    Input,
+    Button,
+} from "react-bootstrap";
+import API from "../api.js";
 
 export default class AddBudget extends Component {
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state = {
             input: {},
-            errors: {}
+            errors: {},
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -17,32 +26,34 @@ export default class AddBudget extends Component {
         let input = this.state.input;
         input[event.target.name] = event.target.value;
         this.setState({
-            input
+            input,
         });
     }
     handleSubmit(event) {
         event.preventDefault();
-        if(!this.validate()) {
+        if (!this.validate()) {
             return false;
         }
         let input = {};
 
-        API.post('/api/budgets', {
-            name: this.state.input['name'],
-        }).then(res => {
-            if (res.status === 201) {
-                this.props.history.push('/budgets');
-            }
-        }).catch((res) => {
-            this.setState({
-                errors: {form: res.response.data.detail}
+        API.post("/api/budgets", {
+            name: this.state.input["name"],
+        })
+            .then((res) => {
+                if (res.status === 201) {
+                    this.props.history.push("/budgets");
+                }
             })
-        });
+            .catch((res) => {
+                this.setState({
+                    errors: { form: res.response.data.detail },
+                });
+            });
 
         input["name"] = "";
-        this.setState({input:input});
+        this.setState({ input: input });
     }
-    validate(){
+    validate() {
         let input = this.state.input;
         let errors = {};
         let isValid = true;
@@ -53,7 +64,7 @@ export default class AddBudget extends Component {
         }
 
         this.setState({
-            errors: errors
+            errors: errors,
         });
         return isValid;
     }
@@ -62,15 +73,28 @@ export default class AddBudget extends Component {
             <Container>
                 <Row>
                     <Col>
-                        <div className="text-danger">{this.state.errors.form}</div>
-                        <Form method="post" onSubmit={this.handleSubmit} noValidate>
+                        <div className="text-danger">
+                            {this.state.errors.form}
+                        </div>
+                        <Form
+                            method="post"
+                            onSubmit={this.handleSubmit}
+                            noValidate
+                        >
                             <FormGroup>
-                                <Label for="name">Name</Label>
-                                <Input type="text" name="name" id="name" onChange={this.handleChange} />
-                                <div className="text-danger">{this.state.errors.name}</div>
+                                <Form.Label for="name">Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="name"
+                                    id="name"
+                                    onChange={this.handleChange}
+                                />
+                                <div className="text-danger">
+                                    {this.state.errors.name}
+                                </div>
                             </FormGroup>
                             <FormGroup>
-                                <Button>Submit</Button>
+                                <Button type="submit">Submit</Button>
                             </FormGroup>
                         </Form>
                     </Col>

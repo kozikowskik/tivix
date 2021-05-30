@@ -2,8 +2,8 @@
 //https://github.com/do-community/build-react-pagination-demo
 //CHanged look of componed with https://reactstrap.github.io/
 
-import React, { Component, Fragment } from "react";
-import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
+import React, { Component } from "react";
+import { Pagination } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 const LEFT_PAGE = "LEFT";
@@ -191,37 +191,28 @@ class PaginationPanel extends Component {
                 {pages.map((page, index) => {
                     if (page === LEFT_PAGE)
                         return (
-                            <PaginationItem>
-                                <PaginationLink
-                                    previous
-                                    href="#"
-                                    onClick={this.handleMoveLeft}
-                                />
-                            </PaginationItem>
+                            <Pagination.Prev
+                                href="#"
+                                onClick={this.handleMoveLeft}
+                            />
                         );
 
                     if (page === RIGHT_PAGE)
                         return (
-                            <PaginationItem>
-                                <PaginationLink
-                                    next
-                                    href="#"
-                                    onClick={this.handleMoveRight}
-                                />
-                            </PaginationItem>
+                            <Pagination.Next
+                                href="#"
+                                onClick={this.handleMoveRight}
+                            />
                         );
                     return (
-                        <PaginationItem
+                        <Pagination.Item
                             key={index}
                             active={currentPage === page ? true : false}
+                            href="#"
+                            onClick={this.handleClick(page)}
                         >
-                            <PaginationLink
-                                href="#"
-                                onClick={this.handleClick(page)}
-                            >
-                                {page}
-                            </PaginationLink>
-                        </PaginationItem>
+                            {page}
+                        </Pagination.Item>
                     );
                 })}
             </Pagination>
