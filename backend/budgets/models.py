@@ -1,13 +1,16 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from djmoney.models.fields import MoneyField
+
 from categories.models import Category
 
 
 class Budget(models.Model):
     name = models.CharField(max_length=255)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    value = MoneyField(max_digits=14, decimal_places=2, default_currency="USD")
 
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     shared_with = models.ManyToManyField(User, related_name="shared_with_users")
 
     class Meta:

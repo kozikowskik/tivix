@@ -29,29 +29,31 @@ export default class AddBudget extends Component {
 
         API.post("/api/budgets", {
             name: this.state.input["name"],
+            value: this.state.input["value"],
         })
             .then((res) => {
                 if (res.status === 201) {
                     this.props.history.push("/budgets");
                 }
             })
-            .catch((res) => {
-                this.setState({
-                    errors: { form: res.response.data.detail },
-                });
-            });
+            .catch((res) => {});
 
         input["name"] = "";
         this.setState({ input: input });
     }
     validate() {
+        const messageIsRequired = "Please enter your budget name.";
         let input = this.state.input;
         let errors = {};
         let isValid = true;
 
         if (!input["name"]) {
             isValid = false;
-            errors["name"] = "Please enter your budget name.";
+            errors["name"] = messageIsRequired;
+        }
+        if (!input["value"]) {
+            isValid = false;
+            errors["value"] = messageIsRequired;
         }
 
         this.setState({
@@ -67,11 +69,7 @@ export default class AddBudget extends Component {
                         <div className="text-danger">
                             {this.state.errors.form}
                         </div>
-                        <Form
-                            method="post"
-                            onSubmit={this.handleSubmit}
-                            noValidate
-                        >
+                        <Form method="post" onSubmit={this.handleSubmit}>
                             <FormGroup>
                                 <Form.Label for="name">Name</Form.Label>
                                 <Form.Control
@@ -82,6 +80,18 @@ export default class AddBudget extends Component {
                                 />
                                 <div className="text-danger">
                                     {this.state.errors.name}
+                                </div>
+                            </FormGroup>
+                            <FormGroup>
+                                <Form.Label for="name">Value</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="value"
+                                    id="value"
+                                    onChange={this.handleChange}
+                                />
+                                <div className="text-danger">
+                                    {this.state.errors.value}
                                 </div>
                             </FormGroup>
                             <FormGroup>

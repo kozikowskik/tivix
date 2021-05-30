@@ -5,3 +5,4 @@ markdown==3.3.4
 django-filter==2.4.0
 djangorestframework-simplejwt==4.6.0
 django-cors-headers==3.7.0
+django-money==2.0

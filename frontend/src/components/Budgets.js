@@ -90,6 +90,7 @@ export default class Budget extends Component {
                                 <thead>
                                     <th>#</th>
                                     <th>Name</th>
+                                    <th>Value</th>
                                     <th>Actions</th>
                                 </thead>
                                 <tbody>
@@ -105,6 +106,7 @@ export default class Budget extends Component {
                                                 <tr key={index}>
                                                     <th>{index + 1}</th>
                                                     <td>{budget.name}</td>
+                                                    <td>{budget.value}</td>
                                                     <td>
                                                         <Link
                                                             to={`/budgets/edit/${budget.pk}`}

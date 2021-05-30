@@ -27,7 +27,7 @@ export default class EditBudget extends Component {
                     });
                 }
                 this.setState({
-                    input: { name: res.data.name },
+                    input: { name: res.data.name, value: res.data.value },
                 });
             })
             .catch((res) => {
@@ -54,6 +54,7 @@ export default class EditBudget extends Component {
         let input = {};
         API.put(`/api/budgets/${this.budgetId}`, {
             name: this.state.input["name"],
+            value: this.state.input["value"],
         })
             .then((res) => {
                 if (res.status !== 201) {
@@ -81,6 +82,10 @@ export default class EditBudget extends Component {
         if (!input["name"]) {
             isValid = false;
             errors["name"] = "Please enter your budget name.";
+        }
+        if (!input["value"]) {
+            isValid = false;
+            errors["value"] = "Please enter your budget name.";
         }
 
         this.setState({
@@ -113,6 +118,19 @@ export default class EditBudget extends Component {
                                 />
                                 <div className="text-danger">
                                     {this.state.errors.name}
+                                </div>
+                            </FormGroup>
+                            <FormGroup>
+                                <Form.Label for="name">Value</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="value"
+                                    id="value"
+                                    value={this.state.input.value}
+                                    onChange={this.handleChange}
+                                />
+                                <div className="text-danger">
+                                    {this.state.errors.value}
                                 </div>
                             </FormGroup>
                             <FormGroup>
