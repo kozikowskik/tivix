@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import API from "../api.js";
 import { Container, Col, Row, Form, Button, Table } from "reactstrap";
 import PaginationPanel from "./PaginationPanel.js";
+import * as Icon from "react-bootstrap-icons";
 
 export default class Budget extends Component {
     constructor(props) {
@@ -113,6 +114,9 @@ export default class Budget extends Component {
                                                     }
                                                 >
                                                     Delete
+                                                </Button>
+                                                <Button>
+                                                    <Icon.CashCoin />
                                                 </Button>
                                             </td>
                                         </tr>
