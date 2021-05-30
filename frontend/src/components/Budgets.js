@@ -123,7 +123,9 @@ export default class Budget extends Component {
                                                         >
                                                             Delete
                                                         </Button>
-                                                        <Link to={``}>
+                                                        <Link
+                                                            to={`/budgets/${budget.pk}/transactions`}
+                                                        >
                                                             <Button variant="success">
                                                                 <Icon.CashCoin />
                                                             </Button>

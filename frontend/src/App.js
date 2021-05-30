@@ -11,9 +11,11 @@ import PrivateRoute from "./routers/privateRoute.router.js";
 
 import Login from "./components/Login.js";
 import Dashboard from "./components/Dashboard.js";
+
 import Budgets from "./components/Budgets.js";
 import AddBudget from "./components/AddBudget.js";
 import EditBudget from "./components/EditBudget.js";
+import BudgetTransactions from "./components/BudgetTransactions.js";
 
 function isAuthenticated() {
     let jwtAccessToken = localStorage.getItem("jwtAccessToken");
@@ -57,6 +59,12 @@ function App() {
                         authed={isAuthenticated()}
                         path="/budgets/edit/:id"
                         component={EditBudget}
+                    />
+                    <PrivateRoute
+                        exact
+                        authed={isAuthenticated()}
+                        path="/budgets/:id/transactions"
+                        component={BudgetTransactions}
                     />
 
                     <Redirect to="/" />

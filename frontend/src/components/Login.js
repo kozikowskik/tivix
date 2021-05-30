@@ -92,7 +92,7 @@ export default class Login extends Component {
         return (
             <Container>
                 <Row>
-                    <Col sm="12" md={{ size: 5, offset: 4 }}>
+                    <Col xs={12} md={{ span: 5, offset: 3 }}>
                         <Card border="primary">
                             <Card.Header>Sign In</Card.Header>
                             <Card.Body>

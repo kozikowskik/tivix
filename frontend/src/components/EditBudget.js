@@ -20,7 +20,11 @@ export default class EditBudget extends Component {
         API.get(`/api/budgets/${this.budgetId}`)
             .then((res) => {
                 if (res.status !== 201) {
-                    this.state["errors"]["form"] = res.data.details;
+                    this.setState({
+                        errors: {
+                            form: res.data.details,
+                        },
+                    });
                 }
                 this.setState({
                     input: { name: res.data.name },
@@ -53,7 +57,11 @@ export default class EditBudget extends Component {
         })
             .then((res) => {
                 if (res.status !== 201) {
-                    this.state["errors"]["form"] = res.data.details;
+                    this.setState({
+                        errors: {
+                            form: res.data.details,
+                        },
+                    });
                 }
                 this.props.history.push("/budgets");
             })

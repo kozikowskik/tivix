@@ -1,14 +1,5 @@
 import React, { Component } from "react";
-import {
-    Container,
-    Col,
-    Row,
-    Form,
-    FormGroup,
-    Label,
-    Input,
-    Button,
-} from "react-bootstrap";
+import { Container, Col, Row, Form, FormGroup, Button } from "react-bootstrap";
 import API from "../api.js";
 
 export default class AddBudget extends Component {
