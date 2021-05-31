@@ -8,4 +8,4 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ["id", "name", "type", "user"]
+        fields = ["id", "name", "user"]
