@@ -9,6 +9,9 @@ from categories.models import Category
 class Budget(models.Model):
     name = models.CharField(max_length=255)
     value = MoneyField(max_digits=14, decimal_places=2, default_currency="USD")
+    saldo = MoneyField(
+        max_digits=14, decimal_places=2, default_currency="USD", default=0
+    )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     shared_with = models.ManyToManyField(User, related_name="shared_with_users")
