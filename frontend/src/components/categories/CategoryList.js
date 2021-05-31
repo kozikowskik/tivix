@@ -35,7 +35,7 @@ export default class CategoryList extends Component {
     }
 
     getCategoriesList() {
-        const colSpan = 4
+        const colSpan = 3
         if (this.state.categories.length === 0 && !this.state.fetching) return (
             <tr>
                 <td colSpan={colSpan}>Please add category first.</td>
@@ -52,7 +52,6 @@ export default class CategoryList extends Component {
             <tr key={index}>
                 <td>{(index + 1)}</td>
                 <td>{category.name}</td>
-                <td>{category.type}</td>
                 <td>
                     {<Button variant="danger" onClick={() => {this.handlDelete(category.id)}}><Icon.X /></Button>}
                 </td>

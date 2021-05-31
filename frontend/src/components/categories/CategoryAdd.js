@@ -36,10 +36,8 @@ export default class CategoryAdd extends Component {
 
         API.post("/api/categories", {
             name: this.state.input["name"],
-            type: this.state.input["type"],
         })
             .then((res) => {
-                console.log(res)
                 this.props.history.push("/categories");
             })
             .catch((res) => {
@@ -52,8 +50,6 @@ export default class CategoryAdd extends Component {
             });
 
         input["name"] = "";
-        input["type"] = "";
-
         this.setState({ input: input });
     }
 
@@ -67,10 +63,6 @@ export default class CategoryAdd extends Component {
         if (!input["name"]) {
             isValid = false;
             errors["name"] = messageIsRequired;
-        }
-        if (!input["type"]) {
-            isValid = false;
-            errors["type"] = messageIsRequired;
         }
 
         this.setState({
@@ -94,14 +86,6 @@ export default class CategoryAdd extends Component {
                             <Col>
                                 <Form.Control name="name" placeholder="Name" required onChange={this.handleChange} />
                                 <FormFieldErrors errors={this.state.errors.name} />
-                            </Col>
-                            <Col>
-                                <Form.Control as="select" name="type" required onChange={this.handleChange}>
-                                    <option>Category Type</option>
-                                    <option value="income">Income</option>
-                                    <option value="expense">Expense</option>
-                                </Form.Control>
-                                <FormFieldErrors errors={this.state.errors.type} />
                             </Col>
                             <Col className="text-left">
                                 <Button type="submit">Submit</Button>

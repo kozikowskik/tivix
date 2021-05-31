@@ -23,21 +23,18 @@ class Budget(models.Model):
         return self.name
 
 
-class Income(models.Model):
+class Transaction(models.Model):
+    class Type(models.TextChoices):
+        INCOME = "income", "Income"
+        EXPENSE = "expense", "Expense"
+
     name = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    transaction_type = models.CharField(
+        max_length=7, choices=Type.choices, default=Type.INCOME
+    )
 
-    def __str__(self):
-        return self.name
-
-
-class Expense(models.Model):
-    name = models.CharField(max_length=255)
-    amount = models.DecimalField(max_digits=8, decimal_places=2)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 

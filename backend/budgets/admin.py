@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 
-from budgets.models import Budget, Expense, Income
+from budgets.models import Budget, Transaction
 
 
 class BudgetAdminForm(forms.ModelForm):
@@ -23,5 +23,4 @@ class BudgetAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Budget, BudgetAdmin)
-admin.site.register(Income)
-admin.site.register(Expense)
+admin.site.register(Transaction)
