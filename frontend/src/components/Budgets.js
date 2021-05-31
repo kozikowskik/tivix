@@ -23,7 +23,7 @@ export default class Budget extends Component {
     componentDidMount() {
         this.setState({ fetching: true });
 
-        API.get("/api/budgets").then((res) => {
+        API.get("/budgets").then((res) => {
             this.setState({
                 budgets: res.data.results,
                 totalRecords: res.data.count,
