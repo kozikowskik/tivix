@@ -52,9 +52,10 @@ export default class Login extends Component {
                 this.props.history.push(this.successUrl);
             })
             .catch((res) => {
-                this.setState({
-                    errors: { form: res.response.data.detail },
-                });
+                if (!('response' in res)) {
+                    console.log("Unknow error.");
+                }
+                console.log(res.response);
             });
 
         input["username"] = "";

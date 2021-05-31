@@ -39,10 +39,16 @@ export default class CategoryAdd extends Component {
             type: this.state.input["type"],
         })
             .then((res) => {
+                console.log(res)
                 this.props.history.push("/categories");
             })
             .catch((res) => {
-
+                if (!('response' in res)) {
+                    console.log("Uknown error.")
+                }
+                this.setState({
+                    errors: res.response.data
+                })
             });
 
         input["name"] = "";
@@ -88,20 +94,14 @@ export default class CategoryAdd extends Component {
                             <Col>
                                 <Form.Control name="name" placeholder="Name" required onChange={this.handleChange} />
                                 <FormFieldErrors errors={this.state.errors.name} />
-                                <div className="text-danger">
-                                    {this.state.errors.name}
-                                </div>
                             </Col>
                             <Col>
                                 <Form.Control as="select" name="type" required onChange={this.handleChange}>
-                                    <option>Open this select menu</option>
-                                    <option value="invome">Income</option>
+                                    <option>Category Type</option>
+                                    <option value="income">Income</option>
                                     <option value="expense">Expense</option>
                                 </Form.Control>
                                 <FormFieldErrors errors={this.state.errors.type} />
-                                <div className="text-danger">
-                                    {this.state.errors.type}
-                                </div>
                             </Col>
                             <Col className="text-left">
                                 <Button type="submit">Submit</Button>

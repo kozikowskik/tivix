@@ -7,12 +7,13 @@ export default class FormFieldErrors extends Component {
         this.showErrors = this.showErrors.bind(this);
     }
     showErrors() {
-        const errors = [];
-        console.log(this.props)
-        return (
-            errors.map((error, index) => (
+        if (Array.isArray(this.props.errors) && this.props.errors.length) return (
+            this.props.errors.map((error, index) => (
                     <div key={index}>{error}</div>
                 ))
+        );
+        return (
+            <div>{this.props.errors}</div>
         );
     }
 
