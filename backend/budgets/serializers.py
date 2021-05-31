@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from .models import Budget, Transaction
@@ -8,7 +9,7 @@ class BudgetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Budget
-        fields = ["pk", "name", "user", "value", "saldo"]
+        fields = ["id", "name", "user", "value", "saldo"]
 
 
 class TransactionSerializer(serializers.ModelSerializer):
@@ -37,3 +38,9 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     def get_transaction_type_name(self, obj):
         return obj.get_transaction_type_display()
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "login", "email"]
