@@ -36,17 +36,17 @@ export default class CategoryList extends Component {
 
     getCategoriesList() {
         const colSpan = 4
-        if (this.state.categories.length === 0 ) return (
+        if (this.state.categories.length === 0 && !this.state.fetching) return (
             <tr>
-                <td colSpan={colSpan}>Please add first category.</td>
+                <td colSpan={colSpan}>Please add category first.</td>
             </tr>
         );
         if (this.state.fetching === true) return (
-                <tr>
-                    <td colSpan={colSpan}>
-                        <Spinner animation="border" variant="primary" />
-                    </td>
-                </tr>
+            <tr>
+                <td colSpan={colSpan}>
+                    <Spinner animation="border" variant="primary" />
+                </td>
+            </tr>
         );
         return this.state.categories.map((category, index) => (
             <tr key={index}>
@@ -64,7 +64,6 @@ export default class CategoryList extends Component {
         this.setState({ fetching: true });
         API.delete(`/api/categories/${categoryId}`)
             .then((res) => {
-                console.log(res);
                 this.setState({
                     categories: res.data.results,
                     totalRecords: res.data.count,
@@ -72,6 +71,9 @@ export default class CategoryList extends Component {
                 });
             })
             .catch((res) => {
+                if (!('response' in res)) {
+                    console.log("Uknown error.");
+                }
                 // res.response.data;
             });
     }

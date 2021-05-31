@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import API from "../api.js";
-import { Container, Col, Row, Button, Table } from "react-bootstrap";
+import { Container, Col, Row, Button, Table, Spinner } from "react-bootstrap";
 import PaginationPanel from "./PaginationPanel.js";
 import * as Icon from "react-bootstrap-icons";
 import Navigation from "./Navigation.js";
@@ -16,14 +16,15 @@ export default class Budget extends Component {
             totalRecords: 0,
             error: null,
         };
-        this.deleteBudget = this.deleteBudget.bind(this);
+
         this.onPageChanged = this.onPageChanged.bind(this);
+        this.handlDelete = this.handlDelete.bind(this);
     }
 
     componentDidMount() {
         this.setState({ fetching: true });
 
-        API.get("/budgets").then((res) => {
+        API.get("/api/budgets").then((res) => {
             this.setState({
                 budgets: res.data.results,
                 totalRecords: res.data.count,
@@ -32,7 +33,7 @@ export default class Budget extends Component {
         });
     }
 
-    deleteBudget(budgetId) {
+    handlDelete(budgetId) {
         this.setState({ fetching: true });
         API.delete(`/api/budgets/${budgetId}`)
             .then((res) => {
@@ -65,28 +66,54 @@ export default class Budget extends Component {
         return (currentPage - 1) * pageSize + (index + 1);
     }
 
+    getBudgets() {
+        const colSpan = 4;
+        if (this.state.budgets.length === 0 && !this.state.fetching) return (
+            <tr>
+                <td colSpan={colSpan}>Please add budget first.</td>
+            </tr>
+        );
+        if (this.state.fetching === true) return (
+            <tr>
+                <td colSpan={colSpan}>
+                    <Spinner animation="border" variant="primary" />
+                </td>
+            </tr>
+        );
+        return this.state.budgets.map((category, index) => (
+            this.state.budgets.map(
+                (budget, index) => (
+                    <tr key={index}>
+                        <th>{index + 1}</th>
+                        <td>{budget.name}</td>
+                        <td>{budget.value}</td>
+                        <td>
+                            <Button variant="secondary" as={Link} to={`/budgets/edit/${budget.pk}`}><Icon.Pencil /></Button>
+                            <Button variant="primary" as={Link} to={`/budgets/${budget.pk}/transactions`}><Icon.CashCoin /></Button>
+                            <Button variant="danger" onClick={() => {this.handlDelete(budget.id)}}><Icon.X /></Button>
+                        </td>
+                    </tr>
+                )
+            )
+        ));
+    }
+
     render() {
         return (
             <>
                 <Navigation />
-                <Container>
+                <Container className="mt-4">
                     <Row>
                         <Col>
-                            <div className="text-danger">
-                                {this.state.error}
-                            </div>
+                            <div className="text-left mb-4 h2">Budgets List</div>
                         </Col>
-                    </Row>
-                    <Row>
-                        <Col sm={{ size: 2, offset: 10 }}>
-                            <Link to="/budgets/add">
-                                <Button color="primary">Add Budget</Button>
-                            </Link>
+                        <Col className="text-right">
+                            <Button as={Link} to="/budgets/add" variant="secondary"><Icon.Plus /></Button>
                         </Col>
                     </Row>
                     <Row>
                         <Col>
-                            <Table>
+                            <Table striped bordered hover>
                                 <thead>
                                     <th>#</th>
                                     <th>Name</th>
@@ -94,49 +121,7 @@ export default class Budget extends Component {
                                     <th>Actions</th>
                                 </thead>
                                 <tbody>
-                                    {this.state.fetching === true ? (
-                                        <tr>
-                                            <td colspan="3">
-                                                Loading users ...
-                                            </td>
-                                        </tr>
-                                    ) : (
-                                        this.state.budgets.map(
-                                            (budget, index) => (
-                                                <tr key={index}>
-                                                    <th>{index + 1}</th>
-                                                    <td>{budget.name}</td>
-                                                    <td>{budget.value}</td>
-                                                    <td>
-                                                        <Link
-                                                            to={`/budgets/edit/${budget.pk}`}
-                                                        >
-                                                            <Button color="primary">
-                                                                Edit
-                                                            </Button>
-                                                        </Link>
-                                                        <Button
-                                                            color="primary"
-                                                            onClick={() =>
-                                                                this.deleteBudget(
-                                                                    budget.pk
-                                                                )
-                                                            }
-                                                        >
-                                                            Delete
-                                                        </Button>
-                                                        <Link
-                                                            to={`/budgets/${budget.pk}/transactions`}
-                                                        >
-                                                            <Button variant="success">
-                                                                <Icon.CashCoin />
-                                                            </Button>
-                                                        </Link>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        )
-                                    )}
+                                    {this.getBudgets()}
                                 </tbody>
                             </Table>
                         </Col>
