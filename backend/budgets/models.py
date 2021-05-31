@@ -34,6 +34,7 @@ class Transaction(models.Model):
     transaction_type = models.CharField(
         max_length=7, choices=Type.choices, default=Type.INCOME
     )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
