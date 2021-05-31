@@ -37,7 +37,9 @@ export default class CategoryList extends Component {
 
     getCategoriesList() {
         const colSpan = 3
-        if (this.state.categories || this.state.categories.length === 0 && !this.state.fetching) return (
+        const categories = (this.state.categories || []);
+        
+        if (categories || categories.length === 0 && !this.state.fetching) return (
             <tr>
                 <td colSpan={colSpan}>Please add category first.</td>
             </tr>
@@ -49,7 +51,7 @@ export default class CategoryList extends Component {
                 </td>
             </tr>
         );
-        return this.state.categories.map((category, index) => (
+        return categories.map((category, index) => (
             <tr key={index}>
                 <td>{(index + 1)}</td>
                 <td>{category.name}</td>

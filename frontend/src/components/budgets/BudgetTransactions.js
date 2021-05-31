@@ -15,6 +15,9 @@ import FormFieldErrors from "../FormFieldErrors.js"
 import Navigation from "../Navigation.js";
 import ErrorModal from "../ErrorModal.js";
 
+import TransactionTable from "./TransactionTable.js"
+import Saldo from "./Saldo.js";
+
 export default class BudgetTransactions extends Component {
     constructor(props) {
         super(props);
@@ -23,20 +26,22 @@ export default class BudgetTransactions extends Component {
             budget: null,
             categories: [],
             transactions: [],
+            transactionsPending: true,
             errorModal: false,
             input: {},
             errors: {},
         };
 
         this.budgetId = this.props.match.params.id;
+
+        this.getTransactions = this.getTransactions.bind(this);
+        this.getBudget = this.getBudget.bind(this);
+
         this.handleChange = this.handleChange.bind(this);
         this.validate = this.validate.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
 
-        this.getTransactions = this.getTransactions.bind(this);
-
         this.showCategoriesDropdown = this.showCategoriesDropdown.bind(this);
-        this.showTransactions = this.showTransactions.bind(this);
     }
 
     getBudget() {
@@ -62,12 +67,17 @@ export default class BudgetTransactions extends Component {
     getTransactions() {
         API.get(`/api/budgets/${this.budgetId}/transactions`)
             .then((res) => {
-                this.setState({transactions: res.data})
+                this.setState({
+                    transactions: res.data,
+                    transactionsPending: false
+                })
             })
             .catch((res) => {
                 console.log(res)
             });
     }
+
+
     showCategoriesDropdown() {
         return (
             <Form.Control
@@ -77,24 +87,10 @@ export default class BudgetTransactions extends Component {
                 onChange={this.handleChange}
             >
                 <option>Transaction Category</option>
-                {this.state.categories.map((category, index) => (
+                {(this.state.categories || []).map((category, index) => (
                     <option key={index} value={category.id}>{category.name}</option>
                 ))}
             </Form.Control>
-        );
-    }
-    showTransactions() {
-        return (
-            (this.state.transactions || []).map((transaction, index) => (
-                <tr key={index}>
-                    <td>{(index + 1)}</td>
-                    <td>{transaction.name}</td>
-                    <td>{transaction.value}</td>
-                    <td>{transaction.category_name}</td>
-                    <td>{transaction.transaction_type_name}</td>
-                    <td></td>
-                </tr>
-            ))
         );
     }
 
@@ -171,11 +167,13 @@ export default class BudgetTransactions extends Component {
                     return {
                         transactions: transactions
                     };
-                })
+                });
+                this.getBudget();
             })
             .catch((res) => {
                 console.log(res)
             });
+
 
         input["name"] = "";
         input["value"] = "";
@@ -188,18 +186,7 @@ export default class BudgetTransactions extends Component {
             <>
                 <Navigation />
                 <Container className="mt-4">
-                    <Row>
-                        <Col>
-                            <div className="text-left mb-4 h2">
-                                Budget: {this.getBudgetName()}
-                            </div>
-                        </Col>
-                        <Col>
-                            <div className="h2">
-                                Slado: {this.getBudgetSaldo()}/{this.getBudgetValue()}
-                            </div>
-                        </Col>
-                    </Row>
+                    <Saldo budget={this.state.budget} />
                     <Row>
                         <Col>
                             <div className="text-left mb-4 h2">Add Transaction</div>
@@ -256,19 +243,7 @@ export default class BudgetTransactions extends Component {
                     </Row>
                     <Row>
                         <Col>
-                            <Table striped bordered hover>
-                                <thead>
-                                    <th>#</th>
-                                    <th>Name</th>
-                                    <th>Value</th>
-                                    <th>Category</th>
-                                    <th>Type</th>
-                                    <th>Actions</th>
-                                </thead>
-                                <tbody>
-                                    {this.showTransactions()}
-                                </tbody>
-                            </Table>
+                            <TransactionTable transactions={this.state.transactions} pending={this.state.transactionsPending}/>
                         </Col>
                     </Row>
                 </Container>

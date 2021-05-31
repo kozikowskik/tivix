@@ -38,5 +38,11 @@ class Transaction(models.Model):
     budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ["-pk"]
+
     def __str__(self):
         return self.name
+
+    def get_saldo_value(self):
+        return (1 if self.transaction_type == self.Type.INCOME else -1) * self.value
