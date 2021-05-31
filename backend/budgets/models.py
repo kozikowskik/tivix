@@ -29,7 +29,7 @@ class Transaction(models.Model):
         EXPENSE = "expense", "Expense"
 
     name = models.CharField(max_length=255)
-    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    value = MoneyField(max_digits=14, decimal_places=2, default_currency="USD")
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     transaction_type = models.CharField(
         max_length=7, choices=Type.choices, default=Type.INCOME

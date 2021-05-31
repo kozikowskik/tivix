@@ -6,12 +6,13 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from budgets.views import BudgetViewSet
+from budgets.views import BudgetViewSet, TransactionViewSet
 from categories.views import CategoryViewSet
 
 router = DefaultRouter(trailing_slash=False)
 
 router.register("budgets", BudgetViewSet)
+router.register("transactions", TransactionViewSet)
 router.register("categories", CategoryViewSet)
 
 urlpatterns = [

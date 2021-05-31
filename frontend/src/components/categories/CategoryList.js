@@ -20,6 +20,7 @@ export default class CategoryList extends Component {
         this.getCategories = this.getCategories.bind(this);
         this.onPageChanged = this.onPageChanged.bind(this);
         this.handlDelete = this.handlDelete.bind(this);
+        this.getCategories = this.getCategories.bind(this);
     }
 
     getCategories() {
@@ -36,7 +37,7 @@ export default class CategoryList extends Component {
 
     getCategoriesList() {
         const colSpan = 3
-        if (this.state.categories.length === 0 && !this.state.fetching) return (
+        if (this.state.categories || this.state.categories.length === 0 && !this.state.fetching) return (
             <tr>
                 <td colSpan={colSpan}>Please add category first.</td>
             </tr>
