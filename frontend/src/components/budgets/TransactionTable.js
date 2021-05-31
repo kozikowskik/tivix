@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import DataTable from "../DataTable.js"
 import API from "../../api.js";
+import Moment from 'react-moment';
 
 export default class TransactionTable extends Component {
     constructor(props) {
         super(props);
     }
     getHeaders() {
-        return ["#", "Name", "Value", "Category", "Type", "Actions"];
+        return ["#", "Name", "Value", "Category", "Type", "Created At"];
     }
     getRows() {
         return (this.props.transactions || []).map((transaction, index)=> (
@@ -18,7 +19,7 @@ export default class TransactionTable extends Component {
                     transaction.value,
                     transaction.category_name,
                     transaction.transaction_type_name,
-                    "Actions"
+                    <Moment format="YYYY/MM/DD">{transaction.created_at}</Moment>
                 ]
         ))
     }

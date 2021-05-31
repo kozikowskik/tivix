@@ -29,6 +29,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             "category",
             "category_name",
             "transaction_type_name",
+            "created_at",
         ]
 
     def get_category_name(self, obj):

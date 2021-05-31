@@ -83,6 +83,7 @@ export default class BudgetTransactions extends Component {
             <Form.Control
                 name="category"
                 as="select"
+                value={this.state.input.category}
                 placeholder="Type"
                 onChange={this.handleChange}
             >
@@ -179,6 +180,7 @@ export default class BudgetTransactions extends Component {
         input["value"] = "";
         input["category"] = "";
         input["transaction_type"] = "";
+
         this.setState({ input: input });
     }
     render() {
@@ -198,6 +200,7 @@ export default class BudgetTransactions extends Component {
                                 <Form.Control
                                     type="text"
                                     name="name"
+                                    value={this.state.input.name}
                                     placeholder="Name"
                                     onChange={this.handleChange}
                                 />
@@ -207,6 +210,7 @@ export default class BudgetTransactions extends Component {
                                 <Form.Control
                                     type="number"
                                     name="value"
+                                    value={this.state.input.value}
                                     placeholder="Value"
                                     onChange={this.handleChange}
                                 />
@@ -220,6 +224,7 @@ export default class BudgetTransactions extends Component {
                                 <Form.Control
                                     name="type"
                                     as="select"
+                                    value={this.state.input.type}
                                     placeholder="Type"
                                     onChange={this.handleChange}
                                 >
