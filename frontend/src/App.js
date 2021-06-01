@@ -14,7 +14,7 @@ import Dashboard from "./components/Dashboard.js";
 
 import BudgetsList from "./components/budgets/BudgetsList.js";
 import BudgetAdd from "./components/budgets/BudgetAdd.js";
-import EditBudget from "./components/EditBudget.js";
+import BudgetEdit from "./components/budgets/BudgetEdit.js";
 import BudgetTransactions from "./components/budgets/BudgetTransactions.js";
 
 import CategoryList from "./components/categories/CategoryList.js";
@@ -77,7 +77,7 @@ export default class App extends Component {
                             authed={isAuthenticated()}
                             settings={this.settings}
                             path="/budgets/edit/:id"
-                            component={EditBudget}
+                            component={BudgetEdit}
                         />
                         <PrivateRoute
                             exact

@@ -1,23 +1,40 @@
 import React, { Component } from "react";
-import { Container, Col, Row, Form, Button } from "react-bootstrap";
+import { Container, Col, Row } from "react-bootstrap";
 import Navigation from "../Navigation.js";
 import BudgetModel from "./BudgetModel.js";
-import FormFieldErrors from "../FormFieldErrors.js";
 import BudgetForm from "./BudgetForm.js";
 
-export default class BudgetAdd extends Component {
+export default class BudgetEdit extends Component {
     constructor(props) {
         super(props);
 
+        this.budgetId = this.props.match.params.id;
+
         this.state = {
+            pending: true,
             input: {},
             errors: {},
         };
 
-        this.successUrl = "/budgets";
         this.model = new BudgetModel();
+
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    getBudget() {
+        if (this.state.pending !== true) {
+            this.setState({ pending: true });
+        }
+        this.model.get(this.budgetId, (res) => {
+            this.setState({
+                input: { name: res.data.name, value: res.data.value },
+                pending: false,
+            });
+        });
+    }
+    componentDidMount() {
+        this.getBudget();
     }
     handleChange(event) {
         let input = this.state.input;
@@ -31,29 +48,34 @@ export default class BudgetAdd extends Component {
         if (!this.validate()) {
             return false;
         }
-        this.model.save(
+        let input = {};
+
+        this.model.update(
+            this.budgetId,
             {
                 name: this.state.input["name"],
                 value: this.state.input["value"],
             },
             (res) => {
-                this.props.history.push(this.successUrl);
+                this.props.history.push("/budgets");
             }
         );
+        input["name"] = "";
+        input["value"] = "";
+        this.setState({ input: input });
     }
     validate() {
-        const messageIsRequired = "Please enter your budget";
         let input = this.state.input;
         let errors = {};
         let isValid = true;
 
         if (!input["name"]) {
             isValid = false;
-            errors["name"] = messageIsRequired + " name";
+            errors["name"] = "Please enter your budget name.";
         }
         if (!input["value"]) {
             isValid = false;
-            errors["value"] = messageIsRequired + " value";
+            errors["value"] = "Please enter your budget value.";
         }
 
         this.setState({
@@ -61,16 +83,12 @@ export default class BudgetAdd extends Component {
         });
         return isValid;
     }
+
     render() {
         return (
             <>
                 <Navigation />
                 <Container className="mt-4">
-                    <Row>
-                        <Col>
-                            <div className="text-left mb-4 h2">Add Budget</div>
-                        </Col>
-                    </Row>
                     <BudgetForm
                         handleChange={this.handleChange}
                         handleSubmit={this.handleSubmit}
