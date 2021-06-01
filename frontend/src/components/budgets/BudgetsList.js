@@ -1,125 +1,80 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import * as Icon from "react-bootstrap-icons";
-import {
-    Container,
-    Col,
-    Row,
-    Button,
-    Table,
-    Spinner,
-    Dropdown,
-    Modal,
-} from "react-bootstrap";
+import { Container, Col, Row, Button } from "react-bootstrap";
 import PaginationPanel from "../PaginationPanel.js";
 import Navigation from "../Navigation.js";
-import API from "../../api.js";
-import ShareBudgetModal from "./ShareBudgetModal.js";
+import BudgetModel from "./BudgetModel.js";
+import DataTable from "../DataTable.js";
 
 export default class Budget extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            fetching: false,
+            pending: false,
             budgets: [],
             totalRecords: 0,
-            error: null,
-            openShareModal: false,
-            shareModal: false
         };
 
+        this.model = new BudgetModel();
+
+        this.getBudgets = this.getBudgets.bind(this);
+        this.createRows = this.createRows.bind(this);
+
         this.onPageChanged = this.onPageChanged.bind(this);
-
-        this.getButtonDelete = this.getButtonDelete.bind(this);
         this.handlDelete = this.handlDelete.bind(this);
-
-        this.openShareModal = this.openShareModal.bind(this);
     }
 
-    componentDidMount() {
-        this.setState({ fetching: true });
+    getBudgets(page = null) {
+        let data = {};
 
-        API.get("/api/budgets").then((res) => {
+        if (page) {
+            data = { params: { page } };
+        }
+        if (this.state.pending !== true) {
+            this.setState({ pending: true });
+        }
+        this.model.all(data, (res) => {
             this.setState({
-                budgets: res.data.results,
-                totalRecords: res.data.count,
-                fetching: false,
+                budgets: this.createRows(res.data.results),
+                totalRecords: res.data.total_pages,
+                pending: false,
             });
         });
     }
 
-    handlDelete(budgetId) {
-        this.setState({ fetching: true });
-        API.delete(`/api/budgets/${budgetId}`)
-            .then((res) => {
-                this.setState({
-                    budgets: res.data.results,
-                    totalRecords: res.data.count,
-                    fetching: false,
-                });
-            })
-            .catch((res) => {
-                console.log(res);
-            });
+    createRows(data) {
+        return (data || []).map((budget, index) => [
+            index + 1,
+            budget.name,
+            budget.saldo,
+            budget.value,
+            [
+                this.getDeleteButton(budget),
+                this.getEditButton(budget),
+                this.getTransactionsButton(budget),
+            ],
+        ]);
     }
 
     onPageChanged(data) {
-        const { currentPage } = data;
-
-        this.setState({ fetching: true });
-        API.get(`/api/budgets?page=${currentPage}`).then((res) => {
-            this.setState({
-                budgets: res.data.results,
-                totalRecords: res.data.count,
-                fetching: false,
-            });
-        });
+        const { currentPage = 1 } = data;
+        this.getBudgets(currentPage);
     }
 
-    openShareModal(budget) {
-        this.setState({
-            openShareModal: true,
-        });
-        API.get(`/api/users`)
-            .then((res) => {
-                this.setState({
-                    users: res.data,
-                });
-                console.log(res.data)
-            })
-            .catch((res) => {
-                console.log(res);
-            });
-    }
-
-    getElementIndex(currentPage, pageSize, index) {
-        return (currentPage - 1) * pageSize + (index + 1);
-    }
-
-    getShareButton(budget) {
-        return (
-            <Button
-                variant="secondary"
-                onClick={() => this.setState({shreBudgetModal: true})}
-            >
-                <Icon.Share />
-            </Button>
-        );
-    }
-
-    getButtonEdit(budget) {
+    getEditButton(budget) {
         return (
             <Button
                 variant="secondary"
                 as={Link}
-                to={`/budgets/edit/${budget.pk}`}
+                to={`/budgets/edit/${budget.id}`}
             >
                 <Icon.Pencil />
             </Button>
         );
     }
-    getButtonTransactions(budget) {
+    getTransactionsButton(budget) {
         return (
             <Button
                 variant="primary"
@@ -130,7 +85,7 @@ export default class Budget extends Component {
             </Button>
         );
     }
-    getButtonDelete(budget) {
+    getDeleteButton(budget) {
         return (
             <Button
                 variant="danger"
@@ -142,37 +97,11 @@ export default class Budget extends Component {
             </Button>
         );
     }
-
-    getBudgets() {
-        const colSpan = 4;
-        if (this.state.budgets.length === 0 && !this.state.fetching)
-            return (
-                <tr>
-                    <td colSpan={colSpan}>Please add budget first.</td>
-                </tr>
-            );
-        if (this.state.fetching === true)
-            return (
-                <tr>
-                    <td colSpan={colSpan}>
-                        <Spinner animation="border" variant="primary" />
-                    </td>
-                </tr>
-            );
-        return (this.state.budgets || []).map((budget, index) => (
-            <tr key={index}>
-                <th>{index + 1}</th>
-                <td>{budget.name}</td>
-                <td>{budget.value}</td>
-                <td>
-                    {this.getButtonDelete(budget)}
-                    {this.getButtonEdit(budget)}
-                    {this.getButtonTransactions(budget)}
-
-                    {this.getShareButton(budget)}
-                </td>
-            </tr>
-        ));
+    handlDelete(id) {
+        this.setState({ pending: true });
+        this.model.delete(id, (res) => {
+            this.getBudgets();
+        });
     }
 
     render() {
@@ -198,15 +127,18 @@ export default class Budget extends Component {
                     </Row>
                     <Row>
                         <Col>
-                            <Table striped bordered hover>
-                                <thead>
-                                    <th>#</th>
-                                    <th>Name</th>
-                                    <th>Value</th>
-                                    <th>Actions</th>
-                                </thead>
-                                <tbody>{this.getBudgets()}</tbody>
-                            </Table>
+                            <DataTable
+                                headers={[
+                                    "#",
+                                    "Name",
+                                    "Saldo",
+                                    "Value",
+                                    "Actions",
+                                ]}
+                                rows={this.state.budgets}
+                                pending={this.state.pending}
+                                noDataMessage={"Add your first budget."}
+                            />
                         </Col>
                     </Row>
                     <Row>

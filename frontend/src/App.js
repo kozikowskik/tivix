@@ -34,7 +34,7 @@ export default class App extends Component {
         //})();
 
         this.settings = {
-            "PAGE_SIZE": 1
+            PAGE_SIZE: 10,
         };
     }
     render() {
@@ -107,6 +107,5 @@ export default class App extends Component {
                 </div>
             </Router>
         );
-
     }
 }

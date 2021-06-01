@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { Container, Col, Row, Form, FormGroup, Button } from "react-bootstrap";
-import API from "../../api.js";
+import { Container, Col, Row, Form, Button } from "react-bootstrap";
+import Navigation from "../Navigation.js";
+import BudgetModel from "./BudgetModel.js";
+import FormFieldErrors from "../FormFieldErrors.js";
 
-export default class AddBudget extends Component {
+export default class BudgetAdd extends Component {
     constructor(props) {
         super(props);
 
@@ -10,6 +12,9 @@ export default class AddBudget extends Component {
             input: {},
             errors: {},
         };
+
+        this.successUrl = "/budgets";
+        this.model = new BudgetModel();
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -25,21 +30,15 @@ export default class AddBudget extends Component {
         if (!this.validate()) {
             return false;
         }
-        let input = {};
-
-        API.post("/api/budgets", {
-            name: this.state.input["name"],
-            value: this.state.input["value"],
-        })
-            .then((res) => {
-                if (res.status === 201) {
-                    this.props.history.push("/budgets");
-                }
-            })
-            .catch((res) => {});
-
-        input["name"] = "";
-        this.setState({ input: input });
+        this.model.save(
+            {
+                name: this.state.input["name"],
+                value: this.state.input["value"],
+            },
+            (res) => {
+                this.props.history.push(this.successUrl);
+            }
+        );
     }
     validate() {
         const messageIsRequired = "Please enter your budget name.";
@@ -63,44 +62,54 @@ export default class AddBudget extends Component {
     }
     render() {
         return (
-            <Container>
-                <Row>
-                    <Col>
-                        <div className="text-danger">
-                            {this.state.errors.form}
-                        </div>
-                        <Form method="post" onSubmit={this.handleSubmit}>
-                            <FormGroup>
-                                <Form.Label for="name">Name</Form.Label>
+            <>
+                <Navigation />
+                <Container className="mt-4">
+                    <Row>
+                        <Col>
+                            <div className="text-left mb-4 h2">Add Budget</div>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <div className="text-danger">
+                                {this.state.errors.form}
+                            </div>
+                        </Col>
+                    </Row>
+                    <Form noValidate method="post" onSubmit={this.handleSubmit}>
+                        <Row>
+                            <Col>
                                 <Form.Control
                                     type="text"
                                     name="name"
-                                    id="name"
+                                    placeholder="Name"
+                                    required
                                     onChange={this.handleChange}
                                 />
-                                <div className="text-danger">
-                                    {this.state.errors.name}
-                                </div>
-                            </FormGroup>
-                            <FormGroup>
-                                <Form.Label for="name">Value</Form.Label>
+                                <FormFieldErrors
+                                    errors={this.state.errors.name}
+                                />
+                            </Col>
+                            <Col>
                                 <Form.Control
                                     type="number"
                                     name="value"
-                                    id="value"
                                     onChange={this.handleChange}
+                                    placeholder="Value"
+                                    required
                                 />
-                                <div className="text-danger">
-                                    {this.state.errors.value}
-                                </div>
-                            </FormGroup>
-                            <FormGroup>
+                                <FormFieldErrors
+                                    errors={this.state.errors.value}
+                                />
+                            </Col>
+                            <Col className="text-left">
                                 <Button type="submit">Submit</Button>
-                            </FormGroup>
-                        </Form>
-                    </Col>
-                </Row>
-            </Container>
+                            </Col>
+                        </Row>
+                    </Form>
+                </Container>
+            </>
         );
     }
 }

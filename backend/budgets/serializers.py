@@ -9,7 +9,8 @@ class BudgetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Budget
-        fields = ["id", "name", "user", "value", "saldo", "shared_with"]
+        fields = ("id", "name", "user", "value", "saldo", "shared_with")
+        read_only_fields = ("shared_with",)
 
 
 class TransactionSerializer(serializers.ModelSerializer):
