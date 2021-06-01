@@ -40,4 +40,20 @@ export default class BaseModel {
                 error.apply(null, error);
             });
     }
+
+    save(data, success = null, error = null) {
+        API.post("/api/budgets", data)
+            .then((res) => {
+                if (!(typeof success === "function")) {
+                    return false;
+                }
+                success.apply(null, [res, this]);
+            })
+            .catch((res) => {
+                if (!(typeof error === "function")) {
+                    return false;
+                }
+                error.apply(null, error);
+            });
+    }
 }
