@@ -19,6 +19,7 @@ import BudgetTransactions from "./components/budgets/BudgetTransactions.js";
 
 import CategoryList from "./components/categories/CategoryList.js";
 import CategoryAdd from "./components/categories/CategoryAdd.js";
+import API from "./api.js";
 
 function isAuthenticated() {
     let jwtAccessToken = localStorage.getItem("jwtAccessToken");
@@ -27,7 +28,14 @@ function isAuthenticated() {
 
 export default class App extends Component {
     componentWillMount() {
-        console.log("Allication ");
+        //(async () => {
+        //    const resp = await API.get("/api/settings");
+        //    console.log(resp)
+        //})();
+
+        this.settings = {
+            "PAGE_SIZE": 1
+        };
     }
     render() {
         return (
@@ -45,6 +53,7 @@ export default class App extends Component {
                         <PrivateRoute
                             exact
                             authed={isAuthenticated()}
+                            settings={this.settings}
                             path="/dashboard"
                             component={Dashboard}
                         />
@@ -52,24 +61,28 @@ export default class App extends Component {
                         <PrivateRoute
                             exact
                             authed={isAuthenticated()}
+                            settings={this.settings}
                             path="/budgets"
                             component={BudgetsList}
                         />
                         <PrivateRoute
                             exact
                             authed={isAuthenticated()}
+                            settings={this.settings}
                             path="/budgets/add"
                             component={BudgetAdd}
                         />
                         <PrivateRoute
                             exact
                             authed={isAuthenticated()}
+                            settings={this.settings}
                             path="/budgets/edit/:id"
                             component={EditBudget}
                         />
                         <PrivateRoute
                             exact
                             authed={isAuthenticated()}
+                            settings={this.settings}
                             path="/budgets/:id/transactions"
                             component={BudgetTransactions}
                         />
@@ -77,12 +90,14 @@ export default class App extends Component {
                         <PrivateRoute
                             exact
                             authed={isAuthenticated()}
+                            settings={this.settings}
                             path="/categories"
                             component={CategoryList}
                         />
                         <PrivateRoute
                             exact
                             authed={isAuthenticated()}
+                            settings={this.settings}
                             path="/categories/add"
                             component={CategoryAdd}
                         />
