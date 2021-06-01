@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Container, Col, Row, Button, Table, Spinner, Dropdown } from "react-bootstrap";
+import { Table, Spinner } from "react-bootstrap";
 
 export default class DataTable extends Component {
     constructor(props) {
@@ -9,22 +9,26 @@ export default class DataTable extends Component {
 
     showBody() {
         const colSpan = (this.props.headers || []).length;
-        const rows = (this.props.rows || [])
+        const rows = this.props.rows || [];
 
-        if (this.props.pending === true) return (
-            <tr>
-                <td colSpan={colSpan}>
-                    <Spinner animation="border" variant="primary" />
-                </td>
-            </tr>
-        );
-        if (rows.length === 0) return (
-            <tr>
-                <td colSpan={colSpan}>
-                    {this.props.noDataMessage ? this.props.noDataMessage : "Please provide data first."}
-                </td>
-            </tr>
-        );
+        if (this.props.pending === true)
+            return (
+                <tr>
+                    <td colSpan={colSpan}>
+                        <Spinner animation="border" variant="primary" />
+                    </td>
+                </tr>
+            );
+        if (rows.length === 0)
+            return (
+                <tr>
+                    <td colSpan={colSpan}>
+                        {this.props.noDataMessage
+                            ? this.props.noDataMessage
+                            : "Please provide data first."}
+                    </td>
+                </tr>
+            );
         return rows.map((row, index) => (
             <tr key={index}>
                 {(row || []).map((elem, index) => (
@@ -42,11 +46,8 @@ export default class DataTable extends Component {
                         <th>{name}</th>
                     ))}
                 </thead>
-                <tbody>
-                    {this.showBody()}
-                </tbody>
+                <tbody>{this.showBody()}</tbody>
             </Table>
-
         );
     }
 }
