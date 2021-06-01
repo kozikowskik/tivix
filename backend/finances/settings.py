@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     "django_filters",
     "rest_framework",
     "djmoney",
-    # "authentication",
     "categories",
     "budgets",
 ]
