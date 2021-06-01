@@ -9,6 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from budgets.views import BudgetViewSet, TransactionViewSet
 from categories.views import CategoryViewSet
 from users.views import UserViewSet
+from .views import settings_view
 
 router = DefaultRouter(trailing_slash=False)
 
@@ -21,4 +22,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/", include(router.urls)),
+    path("api/settings", settings_view),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
