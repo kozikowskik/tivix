@@ -1,12 +1,8 @@
 import React, { Component } from "react";
-import { Container, Col, Row, Button, Table, Spinner, Form } from "react-bootstrap";
-import {Link} from "react-router-dom";
+import { Container, Col, Row, Button, Form } from "react-bootstrap";
 import Navigation from "../Navigation.js";
 import API from "../../api.js";
-import ErrorModal from "../ErrorModal.js";
-import PaginationPanel from "../PaginationPanel.js";
-import * as Icon from "react-bootstrap-icons";
-import FormFieldErrors from "../FormFieldErrors.js"
+import FormFieldErrors from "../FormFieldErrors.js";
 
 export default class CategoryAdd extends Component {
     constructor(props) {
@@ -41,12 +37,12 @@ export default class CategoryAdd extends Component {
                 this.props.history.push("/categories");
             })
             .catch((res) => {
-                if (!('response' in res)) {
-                    console.log("Uknown error.")
+                if (!("response" in res)) {
+                    console.log("Uknown error.");
                 }
                 this.setState({
-                    errors: res.response.data
-                })
+                    errors: res.response.data,
+                });
             });
 
         input["name"] = "";
@@ -78,14 +74,23 @@ export default class CategoryAdd extends Component {
                 <Container className="mt-4">
                     <Row>
                         <Col>
-                            <div className="text-left mb-4 h2">Add Category</div>
+                            <div className="text-left mb-4 h2">
+                                Add Category
+                            </div>
                         </Col>
                     </Row>
                     <Form noValidate method="post" onSubmit={this.handleSubmit}>
                         <Row>
                             <Col>
-                                <Form.Control name="name" placeholder="Name" required onChange={this.handleChange} />
-                                <FormFieldErrors errors={this.state.errors.name} />
+                                <Form.Control
+                                    name="name"
+                                    placeholder="Name"
+                                    required
+                                    onChange={this.handleChange}
+                                />
+                                <FormFieldErrors
+                                    errors={this.state.errors.name}
+                                />
                             </Col>
                             <Col className="text-left">
                                 <Button type="submit">Submit</Button>
