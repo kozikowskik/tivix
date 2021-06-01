@@ -15,11 +15,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
-    def list(self, request):
-        queryset = self.get_queryset().filter(user=self.request.user)
-        serializer = self.get_serializer_class()
-        return Response(serializer(queryset, many=True).data)
-
     def destroy(self, request, pk=None):
         super().destroy(request, pk=None)
         return self.list(request)

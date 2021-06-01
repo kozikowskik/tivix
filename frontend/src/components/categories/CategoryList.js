@@ -3,98 +3,76 @@ import { Container, Col, Row, Button, Table, Spinner } from "react-bootstrap";
 import {Link} from "react-router-dom";
 import Navigation from "../Navigation.js";
 import API from "../../api.js";
-import ErrorModal from "../ErrorModal.js";
 import PaginationPanel from "../PaginationPanel.js";
 import * as Icon from "react-bootstrap-icons";
+import DataTable from "../DataTable.js"
+import CategoryModel from "./CategoryData.js"
 
 export default class CategoryList extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            fetching: false,
+            pending: false,
             categories: [],
             totalRecords: 0,
         };
 
+        this.categoryModel = new CategoryModel();
+
         this.getCategories = this.getCategories.bind(this);
+
         this.onPageChanged = this.onPageChanged.bind(this);
-        this.handlDelete = this.handlDelete.bind(this);
+
+        this.handleDelete = this.handleDelete.bind(this);
+
         this.getCategories = this.getCategories.bind(this);
+
+        this.createRows = this.createRows.bind(this);
     }
 
-    getCategories() {
-        this.setState({ fetching: true });
+    getCategories(page=null) {
+        let data = {};
 
-        API.get("/api/categories").then((res) => {
+        if (page) {
+            data = {params : {page}}
+        }
+
+        this.setState({ pending: true });
+        this.categoryModel.all(data, (res) => {
             this.setState({
-                categories: res.data.results,
+                categories: this.createRows(res.data.results),
                 totalRecords: res.data.count,
-                fetching: false,
+                pending: false,
             });
         });
+
     }
 
-    getCategoriesList() {
-        const colSpan = 3
-        const categories = (this.state.categories || []);
-        
-        if (categories || categories.length === 0 && !this.state.fetching) return (
-            <tr>
-                <td colSpan={colSpan}>Please add category first.</td>
-            </tr>
-        );
-        if (this.state.fetching === true) return (
-            <tr>
-                <td colSpan={colSpan}>
-                    <Spinner animation="border" variant="primary" />
-                </td>
-            </tr>
-        );
-        return categories.map((category, index) => (
-            <tr key={index}>
-                <td>{(index + 1)}</td>
-                <td>{category.name}</td>
-                <td>
-                    {<Button variant="danger" onClick={() => {this.handlDelete(category.id)}}><Icon.X /></Button>}
-                </td>
-            </tr>
-        ));
-    }
-
-    handlDelete(categoryId) {
-        this.setState({ fetching: true });
-        API.delete(`/api/categories/${categoryId}`)
-            .then((res) => {
-                this.setState({
-                    categories: res.data.results,
-                    totalRecords: res.data.count,
-                    fetching: false,
-                });
-            })
-            .catch((res) => {
-                if (!('response' in res)) {
-                    console.log("Uknown error.");
-                }
-                // res.response.data;
-            });
+    handleDelete(categoryId) {
+        this.setState({ pending: true });
+        this.categoryModel.delete(categoryId, (res) => {
+            this.getCategories();
+        });
     }
 
     onPageChanged(data) {
-        const { currentPage } = data;
+        const { currentPage = 1} = data;
 
-        this.setState({ fetching: true });
-        API.get(`/api/categories?page=${currentPage}`).then((res) => {
-            this.setState({
-                categories: res.data.results,
-                totalRecords: res.data.count,
-                fetching: false,
-            });
-        });
+        this.getCategories(currentPage)
+    }
+
+    createRows(categories) {
+        return (categories || []).map((category, index)=> (
+            [
+                (index + 1),
+                category.name,
+                <Button onClick={() => {this.handleDelete(category.id)}}><Icon.X /></Button>
+            ]
+        ))
     }
 
     componentDidMount() {
-        this.getCategories();
     }
 
     render() {
@@ -112,16 +90,12 @@ export default class CategoryList extends Component {
                     </Row>
                     <Row>
                         <Col>
-                            <Table striped bordered hover>
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Name</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>{this.getCategoriesList()}</tbody>
-                            </Table>
+                            <DataTable
+                                headers={["#", "Name", "Actions"]}
+                                rows={this.state.categories}
+                                pending={this.state.pending}
+                                noDataMessage={"Add your first category."}
+                            />
                         </Col>
                     </Row>
                     <Row>

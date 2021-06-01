@@ -9,7 +9,7 @@ class BudgetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Budget
-        fields = ["id", "name", "user", "value", "saldo"]
+        fields = ["id", "name", "user", "value", "saldo", "shared_with"]
 
 
 class TransactionSerializer(serializers.ModelSerializer):
@@ -38,9 +38,3 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     def get_transaction_type_name(self, obj):
         return obj.get_transaction_type_display()
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id", "login", "email"]

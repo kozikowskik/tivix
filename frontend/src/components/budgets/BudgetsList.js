@@ -14,6 +14,7 @@ import {
 import PaginationPanel from "../PaginationPanel.js";
 import Navigation from "../Navigation.js";
 import API from "../../api.js";
+import ShareBudgetModal from "./ShareBudgetModal.js";
 
 export default class Budget extends Component {
     constructor(props) {
@@ -25,6 +26,7 @@ export default class Budget extends Component {
             totalRecords: 0,
             error: null,
             openShareModal: false,
+            shareModal: false
         };
 
         this.onPageChanged = this.onPageChanged.bind(this);
@@ -79,11 +81,12 @@ export default class Budget extends Component {
         this.setState({
             openShareModal: true,
         });
-        API.delete(`/api/budgets/${budget.id}/users`)
+        API.get(`/api/users`)
             .then((res) => {
                 this.setState({
                     users: res.data,
                 });
+                console.log(res.data)
             })
             .catch((res) => {
                 console.log(res);
@@ -98,7 +101,7 @@ export default class Budget extends Component {
         return (
             <Button
                 variant="secondary"
-                onClick={() => this.openShareModal(budget)}
+                onClick={() => this.setState({shreBudgetModal: true})}
             >
                 <Icon.Share />
             </Button>
@@ -165,6 +168,7 @@ export default class Budget extends Component {
                     {this.getButtonDelete(budget)}
                     {this.getButtonEdit(budget)}
                     {this.getButtonTransactions(budget)}
+
                     {this.getShareButton(budget)}
                 </td>
             </tr>
@@ -216,29 +220,6 @@ export default class Budget extends Component {
                         </Col>
                     </Row>
                 </Container>
-                <Modal show={this.state.openShareModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Share this Budget with</Modal.Title>
-                    </Modal.Header>
-
-                    <Modal.Body>
-                        {(this.state.users || []).map((user) => {
-                            console.log(user);
-                        })}
-                    </Modal.Body>
-
-                    <Modal.Footer>
-                        <Button
-                            variant="secondary"
-                            onClick={() =>
-                                this.setState({ openShareModal: false })
-                            }
-                        >
-                            Close
-                        </Button>
-                        <Button variant="primary">Save changes</Button>
-                    </Modal.Footer>
-                </Modal>
             </>
         );
     }

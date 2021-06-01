@@ -20,7 +20,9 @@ export default class DataTable extends Component {
         );
         if (rows.length === 0) return (
             <tr>
-                <td colSpan={colSpan}>Please provide data first.</td>
+                <td colSpan={colSpan}>
+                    {this.props.noDataMessage ? this.props.noDataMessage : "Please provide data first."}
+                </td>
             </tr>
         );
         return rows.map((row, index) => (

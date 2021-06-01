@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.shortcuts import render
 
 from rest_framework import viewsets
@@ -6,7 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import Budget, Transaction
-from .serializers import BudgetSerializer, TransactionSerializer, UserSerializer
+from .serializers import BudgetSerializer, TransactionSerializer
 
 
 class BudgetViewSet(viewsets.ModelViewSet):
@@ -49,8 +48,3 @@ class TransactionViewSet(viewsets.ModelViewSet):
         budget = serializer.instance.budget
         budget.saldo += serializer.instance.get_saldo_value()
         budget.save()
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
