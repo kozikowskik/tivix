@@ -8,27 +8,22 @@ export default class BudgetEdit extends Component {
     constructor(props) {
         super(props);
 
-        this.budgetId = this.props.match.params.id;
+        this.state = { pending: true, inputs: {} };
 
-        this.state = {
-            pending: true,
-            input: {},
-            errors: {},
-        };
+        this.budgetId = this.props.match.params.id;
 
         this.model = new BudgetModel();
 
-        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-
     getBudget() {
         if (this.state.pending !== true) {
             this.setState({ pending: true });
         }
         this.model.get(this.budgetId, (res) => {
+            this.props.inputs.name = res.data.name;
+            this.props.inputs.value = res.data.value;
             this.setState({
-                input: { name: res.data.name, value: res.data.value },
                 pending: false,
             });
         });
@@ -36,53 +31,31 @@ export default class BudgetEdit extends Component {
     componentDidMount() {
         this.getBudget();
     }
-    handleChange(event) {
-        let input = this.state.input;
-        input[event.target.name] = event.target.value;
-        this.setState({
-            input,
-        });
-    }
-    handleSubmit(event) {
-        event.preventDefault();
-        if (!this.validate()) {
-            return false;
-        }
-        let input = {};
-
+    handleSubmit() {
         this.model.update(
             this.budgetId,
             {
-                name: this.state.input["name"],
-                value: this.state.input["value"],
+                name: this.props.inputs["name"],
+                value: this.props.inputs["value"],
             },
             (res) => {
                 this.props.history.push("/budgets");
             }
         );
-        input["name"] = "";
-        input["value"] = "";
-        this.setState({ input: input });
     }
     validate() {
         const messageIsRequired = "Please enter your budget";
-        let input = this.state.input;
+        let { inputs } = this.props;
         let errors = {};
-        let isValid = true;
 
-        if (!input["name"]) {
-            isValid = false;
+        if (!inputs["name"]) {
             errors["name"] = messageIsRequired + " name";
         }
-        if (!input["value"]) {
-            isValid = false;
+        if (!inputs["value"]) {
             errors["value"] = messageIsRequired + " value";
         }
 
-        this.setState({
-            errors: errors,
-        });
-        return isValid;
+        return errors;
     }
 
     render() {
@@ -90,11 +63,23 @@ export default class BudgetEdit extends Component {
             <>
                 <Navigation />
                 <Container className="mt-4">
+                    <Row>
+                        <Col>
+                            <div className="text-left mb-4 h2">Budget Edit</div>
+                        </Col>
+                    </Row>
                     <BudgetForm
-                        handleChange={this.handleChange}
-                        handleSubmit={this.handleSubmit}
-                        input={this.state.input}
-                        errors={this.state.errors}
+                        handleChange={this.props.handleChange}
+                        handleSubmit={(e) => {
+                            this.props.handleSubmit(
+                                e,
+                                this,
+                                this.validate,
+                                this.handleSubmit
+                            );
+                        }}
+                        inputs={this.props.inputs}
+                        errors={this.props.errors}
                     />
                 </Container>
             </>

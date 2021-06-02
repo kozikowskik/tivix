@@ -29,6 +29,7 @@ function isAuthenticated() {
 
 const LoginWithForm = withForm(Login);
 const BudgetAddWithForm = withForm(BudgetAdd);
+const BudgetEditWithForm = withForm(BudgetEdit);
 const CategoryAddWithForm = withForm(CategoryAdd);
 
 export default class App extends Component {
@@ -85,7 +86,7 @@ export default class App extends Component {
                             authed={isAuthenticated()}
                             settings={this.settings}
                             path="/budgets/:id/edit/"
-                            component={BudgetEdit}
+                            component={BudgetEditWithForm}
                         />
                         <PrivateRoute
                             exact
