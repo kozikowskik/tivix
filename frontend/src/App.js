@@ -29,6 +29,7 @@ function isAuthenticated() {
 
 const LoginWithForm = withForm(Login);
 const BudgetAddWithForm = withForm(BudgetAdd);
+const CategoryAddWithForm = withForm(CategoryAdd);
 
 export default class App extends Component {
     componentWillMount() {
@@ -106,7 +107,7 @@ export default class App extends Component {
                             authed={isAuthenticated()}
                             settings={this.settings}
                             path="/categories/add"
-                            component={CategoryAdd}
+                            component={CategoryAddWithForm}
                         />
 
                         <Redirect to="/" />
