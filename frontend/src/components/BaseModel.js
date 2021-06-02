@@ -45,7 +45,7 @@ export default class BaseModel {
     }
 
     save(data, success = null, error = null) {
-        API.post("/api/budgets", data)
+        API.post(this.url, data)
             .then((res) => {
                 if (!(typeof success === "function")) {
                     return false;
