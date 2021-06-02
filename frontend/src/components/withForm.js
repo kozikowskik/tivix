@@ -12,33 +12,33 @@ const withForm = (WrappedComponent) => {
             this.handleChange = this.handleChange.bind(this);
             this.handleSubmit = this.handleSubmit.bind(this);
         }
-        handleChange(event) {
+        handleChange(event, caller) {
             let input = this.state.input;
             input[event.target.name] = event.target.value;
             this.setState({
                 input,
             });
         }
-        handleSubmit(event, validate, submit) {
+        handleSubmit(event, caller, validate, submit) {
             event.preventDefault();
-            if (!this.validate(validate)) {
+            if (!this.validate(caller, validate)) {
                 return false;
             }
             if (!typeof submit === "function") {
                 throw new Error("Submit is not a function");
             }
-            submit.apply(this, [event]);
+            submit.apply(caller, [event, this]);
             let input = {};
             for (const f in this.state.input) {
                 input[f] = "";
             }
             this.setState({ input });
         }
-        validate(validate) {
+        validate(caller, validate) {
             if (!typeof validate === "function") {
                 throw new Error("Validate is not a function");
             }
-            const errors = validate.apply(this);
+            const errors = validate.apply(caller, [this]);
 
             this.setState({
                 errors,
