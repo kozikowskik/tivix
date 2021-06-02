@@ -19,7 +19,7 @@ export default class Login extends Component {
             .then((res) => {
                 localStorage.setItem("jwtAccessToken", res.data.access);
                 localStorage.setItem("jwtRefreshToken", res.data.refresh);
-                //this.props.history.push(this.successUrl);
+                this.props.history.push(this.props.successUrl);
             })
             .catch((res) => {
                 this.setState({ errors: { form: res.response.data.detail } });
@@ -53,6 +53,7 @@ export default class Login extends Component {
                                     onSubmit={(e) =>
                                         this.props.handleSubmit(
                                             e,
+                                            this,
                                             this.validate,
                                             this.handleSubmit
                                         )
