@@ -27,7 +27,7 @@ const withForm = (WrappedComponent) => {
             if (!typeof submit === "function") {
                 throw new Error("Submit is not a function");
             }
-            submit.apply(this);
+            submit.apply(this, [event]);
             let input = {};
             for (const f in this.state.input) {
                 input[f] = "";
