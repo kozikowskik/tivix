@@ -20,11 +20,14 @@ import BudgetTransactions from "./components/budgets/BudgetTransactions.js";
 import CategoryList from "./components/categories/CategoryList.js";
 import CategoryAdd from "./components/categories/CategoryAdd.js";
 import API from "./api.js";
+import withForm from "./components/withForm.js";
 
 function isAuthenticated() {
     let jwtAccessToken = localStorage.getItem("jwtAccessToken");
     return jwtAccessToken ? true : false;
 }
+
+const LoginForm = withForm(Login);
 
 export default class App extends Component {
     componentWillMount() {
@@ -47,7 +50,10 @@ export default class App extends Component {
                             path="/"
                             exact
                             render={(props) => (
-                                <Login {...props} successUrl={"/dashboard"} />
+                                <LoginForm
+                                    {...props}
+                                    successUrl={"/dashboard"}
+                                />
                             )}
                         />
                         <PrivateRoute
@@ -76,7 +82,7 @@ export default class App extends Component {
                             exact
                             authed={isAuthenticated()}
                             settings={this.settings}
-                            path="/budgets/edit/:id"
+                            path="/budgets/:id/edit/"
                             component={BudgetEdit}
                         />
                         <PrivateRoute
