@@ -26,13 +26,13 @@ export default class Login extends Component {
             });
     }
     validate() {
-        let input = this.props.inputs;
+        let { inputs } = this.props;
         let errors = {};
 
-        if (!input["username"]) {
+        if (!inputs["username"]) {
             errors["username"] = "Please enter username.";
         }
-        if (!input["password"]) {
+        if (!inputs["password"]) {
             errors["password"] = "Please enter password.";
         }
         return errors;

@@ -10,6 +10,8 @@ export default class BudgetAdd extends Component {
 
         this.successUrl = "/budgets";
         this.model = new BudgetModel();
+
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleSubmit() {
         this.model.save(

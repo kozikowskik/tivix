@@ -38,7 +38,7 @@ export default class Budget extends Component {
         this.model.all(data, (res) => {
             this.setState({
                 budgets: this.createRows(res.data.results),
-                totalRecords: res.data.total_pages,
+                totalRecords: res.data.count,
                 pending: false,
             });
         });
@@ -145,8 +145,7 @@ export default class Budget extends Component {
                         <Col>
                             <PaginationPanel
                                 totalRecords={this.state.totalRecords}
-                                pageLimit={1}
-                                pageNeighbours={1}
+                                pageLimit={this.props.settings.PAGE_SIZE}
                                 onPageChanged={this.onPageChanged}
                             />
                         </Col>
