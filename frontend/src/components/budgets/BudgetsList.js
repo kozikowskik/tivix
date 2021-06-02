@@ -68,7 +68,7 @@ export default class Budget extends Component {
             <Button
                 variant="secondary"
                 as={Link}
-                to={`/budgets/edit/${budget.id}`}
+                to={`/budgets/${budget.id}/edit`}
             >
                 <Icon.Pencil />
             </Button>
@@ -79,7 +79,7 @@ export default class Budget extends Component {
             <Button
                 variant="primary"
                 as={Link}
-                to={`/budgets/${budget.pk}/transactions`}
+                to={`/budgets/${budget.id}/transactions`}
             >
                 <Icon.CashCoin />
             </Button>

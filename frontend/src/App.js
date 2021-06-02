@@ -27,7 +27,8 @@ function isAuthenticated() {
     return jwtAccessToken ? true : false;
 }
 
-const LoginForm = withForm(Login);
+const LoginWithForm = withForm(Login);
+const BudgetAddWithForm = withForm(BudgetAdd);
 
 export default class App extends Component {
     componentWillMount() {
@@ -50,7 +51,7 @@ export default class App extends Component {
                             path="/"
                             exact
                             render={(props) => (
-                                <LoginForm
+                                <LoginWithForm
                                     {...props}
                                     successUrl={"/dashboard"}
                                 />
@@ -76,7 +77,7 @@ export default class App extends Component {
                             authed={isAuthenticated()}
                             settings={this.settings}
                             path="/budgets/add"
-                            component={BudgetAdd}
+                            component={BudgetAddWithForm}
                         />
                         <PrivateRoute
                             exact

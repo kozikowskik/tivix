@@ -1,38 +1,40 @@
 import React, { Component } from "react";
-import {
-    Container,
-    Col,
-    Row,
-    Form,
-    FormGroup,
-    Button,
-    Table,
-} from "react-bootstrap";
+import { Container, Col, Row, Form, Button } from "react-bootstrap";
 
 import API from "../../api.js";
 
-import FormFieldErrors from "../FormFieldErrors.js"
+import FormFieldErrors from "../FormFieldErrors.js";
 import Navigation from "../Navigation.js";
-import ErrorModal from "../ErrorModal.js";
 
-import TransactionTable from "./TransactionTable.js"
+import TransactionTable from "./TransactionTable.js";
 import Saldo from "./Saldo.js";
+
+import BudgetModel from "./BudgetModel.js";
+import TransactionModel from "../transactions/TransactionModel.js";
+
+import TransactionForm from "../transactions/TransactionForm.js";
 
 export default class BudgetTransactions extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            pending: true,
             budget: null,
-            categories: [],
+
             transactions: [],
             transactionsPending: true,
+
+            categories: [],
             errorModal: false,
             input: {},
             errors: {},
         };
 
         this.budgetId = this.props.match.params.id;
+
+        this.budgetModel = new BudgetModel();
+        this.transactionModel = new TransactionModel(this.budgetId);
 
         this.getTransactions = this.getTransactions.bind(this);
         this.getBudget = this.getBudget.bind(this);
@@ -44,71 +46,61 @@ export default class BudgetTransactions extends Component {
         this.showCategoriesDropdown = this.showCategoriesDropdown.bind(this);
     }
 
+    componentDidMount() {
+        this.getBudget();
+        this.getTransactions();
+        //this.getCategories();
+    }
+
     getBudget() {
-        API.get(`/api/budgets/${this.budgetId}`)
+        if (this.state.pending !== true) {
+            this.setState({ pending: true });
+        }
+        this.budgetModel.get(this.budgetId, (res) => {
+            this.setState({
+                budget: res.data,
+                pending: false,
+            });
+        });
+    }
+    getTransactions() {
+        if (this.state.transactionsPending !== true) {
+            this.setState({ transactionsPending: true });
+        }
+        this.transactionModel.all({}, (res) => {
+            this.setState({
+                transactions: res.data,
+                transactionsPending: false,
+            });
+        });
+    }
+    getCategories() {
+        API.get(`/api/categories`)
             .then((res) => {
-                this.setState({
-                    budget: res.data,
-                });
+                this.setState({ categories: res.data });
             })
             .catch((res) => {
                 console.log(res);
             });
     }
-    getCategories() {
-        API.get(`/api/categories`)
-            .then((res) => {
-                this.setState({categories: res.data})
-            })
-            .catch((res) => {
-                console.log(res)
-            });
-    }
-    getTransactions() {
-        API.get(`/api/budgets/${this.budgetId}/transactions`)
-            .then((res) => {
-                this.setState({
-                    transactions: res.data,
-                    transactionsPending: false
-                })
-            })
-            .catch((res) => {
-                console.log(res)
-            });
-    }
-
 
     showCategoriesDropdown() {
-        return (
-            <Form.Control
-                name="category"
-                as="select"
-                value={this.state.input.category}
-                placeholder="Type"
-                onChange={this.handleChange}
-            >
-                <option>Transaction Category</option>
-                {(this.state.categories || []).map((category, index) => (
-                    <option key={index} value={category.id}>{category.name}</option>
-                ))}
-            </Form.Control>
-        );
-    }
-
-    getBudgetName() {
-        return this.state.budget ? this.state.budget.name : "";
-    }
-    getBudgetSaldo() {
-        return this.state.budget ? this.state.budget.saldo : "";
-    }
-    getBudgetValue() {
-        return this.state.budget ? this.state.budget.value : "";
-    }
-
-    componentDidMount() {
-        this.getBudget();
-        this.getCategories();
-        this.getTransactions();
+        //return (
+        //    <Form.Control
+        //        name="category"
+        //        as="select"
+        //        value={this.state.input.category}
+        //        placeholder="Type"
+        //        onChange={this.handleChange}
+        //    >
+        //        <option>Transaction Category</option>
+        //        {(this.state.categories || []).map((category, index) => (
+        //            <option key={index} value={category.id}>
+        //                {category.name}
+        //            </option>
+        //        ))}
+        //    </Form.Control>
+        //);
     }
 
     handleChange(event) {
@@ -123,7 +115,6 @@ export default class BudgetTransactions extends Component {
         let input = this.state.input;
         let errors = {};
         let isValid = true;
-
 
         if (!input["name"]) {
             isValid = false;
@@ -159,22 +150,21 @@ export default class BudgetTransactions extends Component {
             value: this.state.input["value"],
             transaction_type: this.state.input["type"],
             category: this.state.input["category"],
-            budget: this.budgetId
+            budget: this.budgetId,
         })
             .then((res) => {
-                let transactions = this.sate
-                this.setState(state => {
-                    const transactions = [...state.transactions, res.data]
+                let transactions = this.sate;
+                this.setState((state) => {
+                    const transactions = [...state.transactions, res.data];
                     return {
-                        transactions: transactions
+                        transactions: transactions,
                     };
                 });
                 this.getBudget();
             })
             .catch((res) => {
-                console.log(res)
+                console.log(res);
             });
-
 
         input["name"] = "";
         input["value"] = "";
@@ -191,66 +181,17 @@ export default class BudgetTransactions extends Component {
                     <Saldo budget={this.state.budget} />
                     <Row>
                         <Col>
-                            <div className="text-left mb-4 h2">Add Transaction</div>
+                            <div className="text-left mb-4 h2">
+                                Add Transaction
+                            </div>
                         </Col>
                     </Row>
-                    <Form method="post" onSubmit={this.handleSubmit} noValidate>
-                        <Row>
-                            <Col>
-                                <Form.Control
-                                    type="text"
-                                    name="name"
-                                    value={this.state.input.name}
-                                    placeholder="Name"
-                                    onChange={this.handleChange}
-                                />
-                                <FormFieldErrors errors={this.state.errors.name} />
-                            </Col>
-                            <Col>
-                                <Form.Control
-                                    type="number"
-                                    name="value"
-                                    value={this.state.input.value}
-                                    placeholder="Value"
-                                    onChange={this.handleChange}
-                                />
-                                <FormFieldErrors errors={this.state.errors.value} />
-                            </Col>
-                            <Col>
-                                {this.showCategoriesDropdown()}
-                                <FormFieldErrors errors={this.state.errors.category} />
-                            </Col>
-                            <Col>
-                                <Form.Control
-                                    name="type"
-                                    as="select"
-                                    value={this.state.input.type}
-                                    placeholder="Type"
-                                    onChange={this.handleChange}
-                                >
-                                    <option>Transaction Type</option>
-                                    <option value="income">Income</option>
-                                    <option value="expense">Expense</option>
-                                </Form.Control>
-                                <FormFieldErrors errors={this.state.errors.type} />
-                            </Col>
-                            <Col className="text-left">
-                                <Button variant="primary" type="submit">
-                                    Submit
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Form>
-                    <Row className="mt-5">
-                        <Col>
-                            <div className="text-left mb-4 h2">Transaction List</div>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <TransactionTable transactions={this.state.transactions} pending={this.state.transactionsPending}/>
-                        </Col>
-                    </Row>
+                    <TransactionForm
+                        handleSubmit={this.handleSubmit}
+                        handleChange={this.handleChange}
+                        input={this.state.input}
+                        errors={this.state.errors}
+                    />
                 </Container>
             </>
         );

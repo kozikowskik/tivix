@@ -12,7 +12,7 @@ export default class BudgetForm extends Component {
                             type="text"
                             name="name"
                             placeholder="Name"
-                            value={this.props.input.name}
+                            value={this.props.inputs.name}
                             onChange={this.props.handleChange}
                         />
                         <FormFieldErrors errors={this.props.errors.name} />
@@ -21,7 +21,7 @@ export default class BudgetForm extends Component {
                         <Form.Control
                             type="number"
                             name="value"
-                            value={this.props.input.value}
+                            value={this.props.inputs.value}
                             onChange={this.props.handleChange}
                             placeholder="Value"
                         />

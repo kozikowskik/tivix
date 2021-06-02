@@ -65,17 +65,18 @@ export default class BudgetEdit extends Component {
         this.setState({ input: input });
     }
     validate() {
+        const messageIsRequired = "Please enter your budget";
         let input = this.state.input;
         let errors = {};
         let isValid = true;
 
         if (!input["name"]) {
             isValid = false;
-            errors["name"] = "Please enter your budget name.";
+            errors["name"] = messageIsRequired + " name";
         }
         if (!input["value"]) {
             isValid = false;
-            errors["value"] = "Please enter your budget value.";
+            errors["value"] = messageIsRequired + " value";
         }
 
         this.setState({
