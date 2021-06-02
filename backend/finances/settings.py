@@ -31,7 +31,6 @@ DEBUG = env.get("APP_DEBUG")
 
 ALLOWED_HOSTS = env.get("APP_ALLOWED_HOSTS").split(" ")
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -52,6 +51,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
