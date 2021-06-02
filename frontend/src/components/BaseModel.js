@@ -18,13 +18,13 @@ export default class BaseModel {
                 if (!(typeof success === "function")) {
                     return false;
                 }
-                success.apply(null, [res]);
+                success.apply(this, [res]);
             })
-            .catch((err) => {
+            .catch((res) => {
                 if (!(typeof error === "function")) {
                     return false;
                 }
-                error.apply(null, error);
+                error.apply(this, [res]);
             });
     }
 
@@ -34,13 +34,13 @@ export default class BaseModel {
                 if (!(typeof success === "function")) {
                     return false;
                 }
-                success.apply(null, [res, this]);
+                success.apply(this, [res]);
             })
-            .catch((err) => {
+            .catch((res) => {
                 if (!(typeof error === "function")) {
                     return false;
                 }
-                error.apply(null, error);
+                error.apply(this, [res]);
             });
     }
 
@@ -50,13 +50,13 @@ export default class BaseModel {
                 if (!(typeof success === "function")) {
                     return false;
                 }
-                success.apply(null, [res, this]);
+                success.apply(this, [res]);
             })
             .catch((res) => {
                 if (!(typeof error === "function")) {
                     return false;
                 }
-                error.apply(null, error);
+                error.apply(this, [res]);
             });
     }
 
@@ -66,13 +66,13 @@ export default class BaseModel {
                 if (!(typeof success === "function")) {
                     return false;
                 }
-                success.apply(null, [res, this]);
+                success.apply(this, [res]);
             })
-            .catch((err) => {
+            .catch((res) => {
                 if (!(typeof error === "function")) {
                     return false;
                 }
-                error.apply(null, error);
+                error.apply(this, [res]);
             });
     }
 
@@ -82,13 +82,13 @@ export default class BaseModel {
                 if (!(typeof success === "function")) {
                     return false;
                 }
-                success.apply(null, [res, this]);
+                success.apply(this, [res]);
             })
-            .catch((err) => {
+            .catch((res) => {
                 if (!(typeof error === "function")) {
                     return false;
                 }
-                error.apply(null, error);
+                error.apply(this, [res]);
             });
     }
 }
