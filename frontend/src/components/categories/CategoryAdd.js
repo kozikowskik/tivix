@@ -1,70 +1,37 @@
 import React, { Component } from "react";
 import { Container, Col, Row, Button, Form } from "react-bootstrap";
 import Navigation from "../Navigation.js";
-import API from "../../api.js";
 import FormFieldErrors from "../FormFieldErrors.js";
+import CategoryModel from "./CategoryModel.js";
 
 export default class CategoryAdd extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            input: {},
-            errors: {},
-        };
-        this.handleChange = this.handleChange.bind(this);
+        this.successUrl = "/categories";
+        this.model = new CategoryModel();
+
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    handleChange(event) {
-        let input = this.state.input;
-        input[event.target.name] = event.target.value;
-        this.setState({
-            input,
-        });
-    }
-
     handleSubmit(event) {
-        event.preventDefault();
-        if (!this.validate()) {
-            return false;
-        }
-        let input = {};
-
-        API.post("/api/categories", {
-            name: this.state.input["name"],
-        })
-            .then((res) => {
-                this.props.history.push("/categories");
-            })
-            .catch((res) => {
-                if (!("response" in res)) {
-                    console.log("Uknown error.");
-                }
-                this.setState({
-                    errors: res.response.data,
-                });
-            });
-
-        input["name"] = "";
-        this.setState({ input: input });
+        this.model.save(
+            {
+                name: this.props.inputs["name"],
+            },
+            () => {
+                this.props.history.push(this.successUrl);
+            }
+        );
     }
 
     validate() {
-        const messageIsRequired = "Please enter your budget name.";
-
-        let input = this.state.input;
+        let { inputs } = this.props;
         let errors = {};
-        let isValid = true;
 
-        if (!input["name"]) {
-            isValid = false;
-            errors["name"] = messageIsRequired;
+        if (!inputs["name"]) {
+            errors["name"] = "Please enter category name";
         }
-
-        this.setState({
-            errors: errors,
-        });
-        return isValid;
+        return errors;
     }
 
     render() {
@@ -79,17 +46,28 @@ export default class CategoryAdd extends Component {
                             </div>
                         </Col>
                     </Row>
-                    <Form noValidate method="post" onSubmit={this.handleSubmit}>
+                    <Form
+                        noValidate
+                        method="post"
+                        onSubmit={(e) => {
+                            this.props.handleSubmit(
+                                e,
+                                this,
+                                this.validate,
+                                this.handleSubmit
+                            );
+                        }}
+                    >
                         <Row>
                             <Col>
                                 <Form.Control
                                     name="name"
                                     placeholder="Name"
-                                    required
-                                    onChange={this.handleChange}
+                                    value={this.props.inputs.name}
+                                    onChange={this.props.handleChange}
                                 />
                                 <FormFieldErrors
-                                    errors={this.state.errors.name}
+                                    errors={this.props.errors.name}
                                 />
                             </Col>
                             <Col className="text-left">

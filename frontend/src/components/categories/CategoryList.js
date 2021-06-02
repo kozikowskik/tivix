@@ -39,7 +39,7 @@ export default class CategoryList extends Component {
         this.model.all(data, (res) => {
             this.setState({
                 categories: this.createRows(res.data.results),
-                totalRecords: res.data.total_pages,
+                totalRecords: res.data.count,
                 pending: false,
             });
         });
@@ -47,7 +47,7 @@ export default class CategoryList extends Component {
 
     handleDelete(categoryId) {
         this.setState({ pending: true });
-        this.categoryModel.delete(categoryId, (res) => {
+        this.model.delete(categoryId, (res) => {
             this.getCategories();
         });
     }
@@ -79,8 +79,6 @@ export default class CategoryList extends Component {
             input,
         });
     }
-
-    componentDidMount() {}
 
     render() {
         return (
@@ -129,7 +127,6 @@ export default class CategoryList extends Component {
                             <PaginationPanel
                                 totalRecords={this.state.totalRecords}
                                 pageLimit={this.props.settings.PAGE_SIZE}
-                                pageNeighbours={1}
                                 onPageChanged={this.onPageChanged}
                             />
                         </Col>
