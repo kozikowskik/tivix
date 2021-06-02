@@ -13,8 +13,8 @@ import API from "../api.js";
 export default class Login extends Component {
     handleSubmit(event) {
         API.post("/api/token/", {
-            username: this.state.input["username"],
-            password: this.state.input["password"],
+            username: this.props.inputs["username"],
+            password: this.props.inputs["password"],
         })
             .then((res) => {
                 localStorage.setItem("jwtAccessToken", res.data.access);
@@ -26,7 +26,7 @@ export default class Login extends Component {
             });
     }
     validate() {
-        let input = this.state.input;
+        let input = this.props.inputs;
         let errors = {};
 
         if (!input["username"]) {
