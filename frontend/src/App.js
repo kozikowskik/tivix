@@ -31,6 +31,7 @@ const LoginWithForm = withForm(Login);
 const BudgetAddWithForm = withForm(BudgetAdd);
 const BudgetEditWithForm = withForm(BudgetEdit);
 const CategoryAddWithForm = withForm(CategoryAdd);
+const BudgetTransactionsWithForm = withForm(BudgetTransactions);
 
 export default class App extends Component {
     componentWillMount() {
@@ -93,7 +94,7 @@ export default class App extends Component {
                             authed={isAuthenticated()}
                             settings={this.settings}
                             path="/budgets/:id/transactions"
-                            component={BudgetTransactions}
+                            component={BudgetTransactionsWithForm}
                         />
 
                         <PrivateRoute
