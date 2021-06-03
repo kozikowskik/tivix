@@ -57,7 +57,7 @@ const withForm = (WrappedComponent) => {
             );
         }
     }
-    WithForm.displayName = `WithSearch(${getDisplayName(WrappedComponent)})`;
+    WithForm.displayName = `WithForm(${getDisplayName(WrappedComponent)})`;
     return WithForm;
 };
 
