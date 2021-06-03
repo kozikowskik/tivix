@@ -25,8 +25,9 @@ class BudgetViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["get"])
     def transactions(self, request, pk=None):
         budget = self.get_object()
-        serializer = TransactionSerializer(budget.transaction_set.all(), many=True)
-        return Response(serializer.data)
+        data = self.paginate_queryset(budget.transaction_set.all())
+        serializer = TransactionSerializer(data, many=True)
+        return self.get_paginated_response(serializer.data)
 
     @action(detail=True, methods=["get"])
     def users(self, request, pk=None):
