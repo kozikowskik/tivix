@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { Container, Col, Row, Form, Button } from "react-bootstrap";
+import { Container, Col, Row } from "react-bootstrap";
 
 import Navigation from "../Navigation.js";
 
-import TransactionTable from "./TransactionTable.js";
+import TransactionTable from "../transactions/TransactionTable.js";
 import Saldo from "./Saldo.js";
 
 import BudgetModel from "./BudgetModel.js";

@@ -54,6 +54,7 @@ export default class Budget extends Component {
                 this.getDeleteButton(budget),
                 this.getEditButton(budget),
                 this.getTransactionsButton(budget),
+                this.getShareButton(budget),
             ],
         ]);
     }
@@ -94,6 +95,17 @@ export default class Budget extends Component {
                 }}
             >
                 <Icon.X />
+            </Button>
+        );
+    }
+    getShareButton(budget) {
+        return (
+            <Button
+                onClick={() => {
+                    this.props.history.push(`/budgets/${budget.id}/share`);
+                }}
+            >
+                <Icon.Share />
             </Button>
         );
     }

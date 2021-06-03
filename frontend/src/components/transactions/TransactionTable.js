@@ -15,7 +15,9 @@ export default class TransactionTable extends Component {
             transaction.value,
             transaction.category_name,
             transaction.transaction_type_name,
-            <Moment format="YYYY/MM/DD">{transaction.created_at}</Moment>,
+            <Moment format="YYYY/MM/DD HH:mm:ss">
+                {transaction.created_at}
+            </Moment>,
         ]);
     }
     render() {
