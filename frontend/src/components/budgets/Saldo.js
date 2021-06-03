@@ -13,21 +13,20 @@ export default class Saldo extends Component {
         this.getSaldo = this.getSaldo.bind(this);
     }
     getBudgetName() {
-        if (this.props.budget === null) return (
-            <Spinner animation="border" variant="primary" />
-        );
+        if (this.props.budget === null)
+            return <Spinner animation="border" variant="primary" />;
         return this.props.budget.name;
     }
     getSaldo() {
-        if(this.props.budget === null) return (
-            <Spinner animation="border" variant="primary" />
-        );
-        let {saldo, value} = this.props.budget;
+        if (this.props.budget === null)
+            return <Spinner animation="border" variant="primary" />;
+        let { saldo, value } = this.props.budget;
 
-        saldo = parseFloat(saldo)
+        saldo = parseFloat(saldo);
         value = parseFloat(value);
 
         let arrow = null;
+        console.log(typeof saldo, typeof value);
         if (saldo === value) {
             arrow = <Icon.ArrowDownUp />;
         } else if (saldo < value) {
@@ -35,17 +34,17 @@ export default class Saldo extends Component {
         } else {
             arrow = <Icon.ArrowUp />;
         }
-
         return (
             <>
                 <span>{arrow}</span>
-                <span>{this.props.budget.saldo} / {this.props.budget.value}</span>
+                <span>
+                    {this.props.budget.saldo} / {this.props.budget.value}
+                </span>
             </>
         );
     }
 
     render() {
-        console.log(this.props.budget);
         return (
             <Row>
                 <Col>
@@ -54,12 +53,9 @@ export default class Saldo extends Component {
                     </div>
                 </Col>
                 <Col>
-                    <div className="h2">
-                        Slado: {this.getSaldo()}
-                    </div>
+                    <div className="h2">Slado: {this.getSaldo()}</div>
                 </Col>
             </Row>
-
         );
     }
 }

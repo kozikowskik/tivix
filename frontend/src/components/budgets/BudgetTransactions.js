@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import { Container, Col, Row, Form, Button } from "react-bootstrap";
 
-import API from "../../api.js";
-
-import FormFieldErrors from "../FormFieldErrors.js";
 import Navigation from "../Navigation.js";
 
 import TransactionTable from "./TransactionTable.js";
@@ -13,6 +10,7 @@ import BudgetModel from "./BudgetModel.js";
 import TransactionModel from "../transactions/TransactionModel.js";
 
 import TransactionForm from "../transactions/TransactionForm.js";
+import CategoryModel from "../categories/CategoryModel.js";
 
 export default class BudgetTransactions extends Component {
     constructor(props) {
@@ -35,21 +33,20 @@ export default class BudgetTransactions extends Component {
 
         this.budgetModel = new BudgetModel();
         this.transactionModel = new TransactionModel(this.budgetId);
+        this.categoriesModel = new CategoryModel();
 
-        this.getTransactions = this.getTransactions.bind(this);
         this.getBudget = this.getBudget.bind(this);
+        this.getCategories = this.getCategories.bind(this);
+        this.getTransactions = this.getTransactions.bind(this);
 
-        this.handleChange = this.handleChange.bind(this);
         this.validate = this.validate.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-
-        this.showCategoriesDropdown = this.showCategoriesDropdown.bind(this);
     }
 
     componentDidMount() {
         this.getBudget();
+        this.getCategories();
         this.getTransactions();
-        //this.getCategories();
     }
 
     getBudget() {
@@ -63,97 +60,57 @@ export default class BudgetTransactions extends Component {
             });
         });
     }
+    getCategories() {
+        this.categoriesModel.all({}, (res) => {
+            this.setState({ categories: res.data.results });
+        });
+    }
     getTransactions() {
         if (this.state.transactionsPending !== true) {
             this.setState({ transactionsPending: true });
         }
-        this.transactionModel.all({}, (res) => {
+        this.budgetModel.getTransactions(this.budgetId, (res) => {
             this.setState({
-                transactions: res.data,
+                transactions: res.data.results,
                 transactionsPending: false,
             });
         });
     }
-    getCategories() {
-        API.get(`/api/categories`)
-            .then((res) => {
-                this.setState({ categories: res.data });
-            })
-            .catch((res) => {
-                console.log(res);
-            });
-    }
-
-    showCategoriesDropdown() {
-        //return (
-        //    <Form.Control
-        //        name="category"
-        //        as="select"
-        //        value={this.state.input.category}
-        //        placeholder="Type"
-        //        onChange={this.handleChange}
-        //    >
-        //        <option>Transaction Category</option>
-        //        {(this.state.categories || []).map((category, index) => (
-        //            <option key={index} value={category.id}>
-        //                {category.name}
-        //            </option>
-        //        ))}
-        //    </Form.Control>
-        //);
-    }
-
-    handleChange(event) {
-        let input = this.state.input;
-        input[event.target.name] = event.target.value;
-        this.setState({
-            input,
-        });
-    }
     validate() {
-        const messageIsRequired = "Please enter your budget name.";
-        let input = this.state.input;
+        const messageIsRequired = (name) => `Please enter your budget ${name}.`;
+        let { inputs } = this.props;
         let errors = {};
-        let isValid = true;
 
-        if (!input["name"]) {
-            isValid = false;
-            errors["name"] = messageIsRequired;
+        if (!inputs["name"]) {
+            errors["name"] = messageIsRequired("name");
         }
-        if (!input["value"]) {
-            isValid = false;
-            errors["value"] = messageIsRequired;
+        if (!inputs["value"]) {
+            errors["value"] = messageIsRequired("value");
         }
-        if (!input["category"]) {
-            isValid = false;
-            errors["category"] = messageIsRequired;
+        if (!inputs["category"]) {
+            errors["category"] = messageIsRequired("category");
         }
-        if (!input["type"]) {
-            isValid = false;
-            errors["type"] = messageIsRequired;
+        if (!inputs["type"]) {
+            errors["type"] = messageIsRequired("type");
         }
-
-        this.setState({
-            errors: errors,
-        });
-        return isValid;
+        return errors;
     }
     handleSubmit(event) {
         event.preventDefault();
         if (!this.validate()) {
             return false;
         }
-        let input = {};
+        const { inputs } = this.props;
 
-        API.post("/api/transactions", {
-            name: this.state.input["name"],
-            value: this.state.input["value"],
-            transaction_type: this.state.input["type"],
-            category: this.state.input["category"],
-            budget: this.budgetId,
-        })
-            .then((res) => {
-                let transactions = this.sate;
+        this.transactionModel.save(
+            {
+                name: inputs["name"],
+                value: inputs["value"],
+                transaction_type: inputs["type"],
+                category: inputs["category"],
+                budget: this.budgetId,
+            },
+            (res) => {
                 this.setState((state) => {
                     const transactions = [...state.transactions, res.data];
                     return {
@@ -161,17 +118,8 @@ export default class BudgetTransactions extends Component {
                     };
                 });
                 this.getBudget();
-            })
-            .catch((res) => {
-                console.log(res);
-            });
-
-        input["name"] = "";
-        input["value"] = "";
-        input["category"] = "";
-        input["transaction_type"] = "";
-
-        this.setState({ input: input });
+            }
+        );
     }
     render() {
         return (
@@ -187,11 +135,27 @@ export default class BudgetTransactions extends Component {
                         </Col>
                     </Row>
                     <TransactionForm
-                        handleSubmit={this.handleSubmit}
-                        handleChange={this.handleChange}
-                        input={this.state.input}
-                        errors={this.state.errors}
+                        handleChange={this.props.handleChange}
+                        handleSubmit={(e) => {
+                            this.props.handleSubmit(
+                                e,
+                                this,
+                                this.validate,
+                                this.handleSubmit
+                            );
+                        }}
+                        categories={this.state.categories}
+                        inputs={this.props.inputs}
+                        errors={this.props.errors}
                     />
+                    <Row className="mt-4">
+                        <Col>
+                            <TransactionTable
+                                pending={this.props.transactionsPending}
+                                transactions={this.state.transactions}
+                            />
+                        </Col>
+                    </Row>
                 </Container>
             </>
         );
