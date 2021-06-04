@@ -11,7 +11,7 @@ import PrivateRoute from "./routers/privateRoute.router.js";
 
 import Login from "./components/Login.js";
 import Logout from "./components/Logout.js";
-import Dashboard from "./components/Dashboard.js";
+import Dashboard from "./components/dashboard/Dashboard.js";
 
 import BudgetsList from "./components/budgets/BudgetsList.js";
 import BudgetAdd from "./components/budgets/BudgetAdd.js";
