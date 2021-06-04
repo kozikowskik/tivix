@@ -18,7 +18,7 @@ export default class BudgetTransactions extends Component {
 
         this.state = {
             pending: true,
-            budget: null,
+            budget: {},
 
             transactions: [],
             transactionsPending: true,
@@ -135,6 +135,7 @@ export default class BudgetTransactions extends Component {
                         </Col>
                     </Row>
                     <TransactionForm
+                        disabled={this.state.budget.shared}
                         handleChange={this.props.handleChange}
                         handleSubmit={(e) => {
                             this.props.handleSubmit(

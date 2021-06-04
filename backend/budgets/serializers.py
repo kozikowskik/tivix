@@ -6,11 +6,15 @@ from .models import Budget, Transaction
 
 class BudgetSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    shared = serializers.SerializerMethodField()
 
     class Meta:
         model = Budget
-        fields = ("id", "name", "user", "value", "saldo", "shared_with")
-        read_only_fields = ("shared_with",)
+        fields = ("id", "name", "user", "value", "saldo", "shared_with", "shared")
+        read_only_fields = ("shared_with", "shared")
+
+    def get_shared(self, obj):
+        return getattr(obj, "shared", False)
 
 
 class TransactionSerializer(serializers.ModelSerializer):

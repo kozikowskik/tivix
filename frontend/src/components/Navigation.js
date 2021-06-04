@@ -14,6 +14,12 @@ export default class Navigation extends Component {
         super(props);
         this.state = {};
     }
+    getUserName() {
+        return localStorage.getItem("username") || "";
+    }
+    getSignInText() {
+        return `Signed is as: ${this.getUserName()}`;
+    }
     render() {
         return (
             <Navbar bg="light" expand="lg">
@@ -33,6 +39,16 @@ export default class Navigation extends Component {
                             Categories
                         </Nav.Link>
                     </Nav>
+                    <Navbar.Text>
+                        <NavDropdown
+                            title={this.getSignInText()}
+                            id="basic-nav-dropdown"
+                        >
+                            <NavDropdown.Item as={Link} to="/logout">
+                                Logout
+                            </NavDropdown.Item>
+                        </NavDropdown>
+                    </Navbar.Text>
                 </Navbar.Collapse>
             </Navbar>
         );

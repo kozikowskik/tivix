@@ -9,6 +9,7 @@ export default class TransactionForm extends Component {
                 <Row>
                     <Col>
                         <Form.Control
+                            disabled={this.props.disabled}
                             type="text"
                             name="name"
                             value={this.props.inputs.name}
@@ -19,6 +20,7 @@ export default class TransactionForm extends Component {
                     </Col>
                     <Col>
                         <Form.Control
+                            disabled={this.props.disabled}
                             type="number"
                             name="value"
                             value={this.props.inputs.value}
@@ -29,6 +31,7 @@ export default class TransactionForm extends Component {
                     </Col>
                     <Col>
                         <Form.Control
+                            disabled={this.props.disabled}
                             name="category"
                             as="select"
                             value={this.props.inputs.category}
@@ -48,6 +51,7 @@ export default class TransactionForm extends Component {
                     </Col>
                     <Col>
                         <Form.Control
+                            disabled={this.props.disabled}
                             name="type"
                             as="select"
                             value={this.props.inputs.type}
@@ -61,7 +65,11 @@ export default class TransactionForm extends Component {
                         <FormFieldErrors errors={this.props.errors.type} />
                     </Col>
                     <Col className="text-left">
-                        <Button variant="primary" type="submit">
+                        <Button
+                            disabled={this.props.disabled}
+                            variant="primary"
+                            type="submit"
+                        >
                             Submit
                         </Button>
                     </Col>
@@ -70,3 +78,6 @@ export default class TransactionForm extends Component {
         );
     }
 }
+TransactionForm.defaultProps = {
+    disabled: false,
+};

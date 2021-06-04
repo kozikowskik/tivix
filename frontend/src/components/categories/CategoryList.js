@@ -101,17 +101,6 @@ export default class CategoryList extends Component {
                             </Button>
                         </Col>
                     </Row>
-                    <Row className="mb-4">
-                        <Col xs={2}>
-                            <Form.Control
-                                name="name"
-                                placeholder="Name"
-                                required
-                                value={this.state.input.name}
-                                onChange={this.handleFilter}
-                            />
-                        </Col>
-                    </Row>
                     <Row>
                         <Col>
                             <DataTable

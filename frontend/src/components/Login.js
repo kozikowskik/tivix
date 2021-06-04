@@ -12,6 +12,7 @@ import API from "../api.js";
 
 export default class Login extends Component {
     handleSubmit(event) {
+        const { username } = this.props.inputs;
         API.post("/api/token/", {
             username: this.props.inputs["username"],
             password: this.props.inputs["password"],
@@ -19,6 +20,7 @@ export default class Login extends Component {
             .then((res) => {
                 localStorage.setItem("jwtAccessToken", res.data.access);
                 localStorage.setItem("jwtRefreshToken", res.data.refresh);
+                localStorage.setItem("username", username);
                 this.props.history.push(this.props.successUrl);
             })
             .catch((res) => {

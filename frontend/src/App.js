@@ -10,12 +10,14 @@ import {
 import PrivateRoute from "./routers/privateRoute.router.js";
 
 import Login from "./components/Login.js";
+import Logout from "./components/Logout.js";
 import Dashboard from "./components/Dashboard.js";
 
 import BudgetsList from "./components/budgets/BudgetsList.js";
 import BudgetAdd from "./components/budgets/BudgetAdd.js";
 import BudgetEdit from "./components/budgets/BudgetEdit.js";
 import BudgetTransactions from "./components/budgets/BudgetTransactions.js";
+import BudgetShare from "./components/budgets/BudgetShare.js";
 
 import CategoryList from "./components/categories/CategoryList.js";
 import CategoryAdd from "./components/categories/CategoryAdd.js";
@@ -35,14 +37,13 @@ const BudgetTransactionsWithForm = withForm(BudgetTransactions);
 
 export default class App extends Component {
     componentWillMount() {
-        //(async () => {
-        //    const resp = await API.get("/api/settings");
-        //    console.log(resp)
-        //})();
-
         this.settings = {
             PAGE_SIZE: 10,
         };
+        //(async () => {
+        //    const resp = await API.get("/api/settings");
+        //    this.settings = resp.data;
+        //})();
     }
     render() {
         return (
@@ -96,6 +97,13 @@ export default class App extends Component {
                             path="/budgets/:id/transactions"
                             component={BudgetTransactionsWithForm}
                         />
+                        <PrivateRoute
+                            exact
+                            authed={isAuthenticated()}
+                            settings={this.settings}
+                            path="/budgets/:id/share"
+                            component={BudgetShare}
+                        />
 
                         <PrivateRoute
                             exact
@@ -110,6 +118,14 @@ export default class App extends Component {
                             settings={this.settings}
                             path="/categories/add"
                             component={CategoryAddWithForm}
+                        />
+
+                        <PrivateRoute
+                            exact
+                            authed={true}
+                            settings={this.settings}
+                            path="/logout"
+                            component={Logout}
                         />
 
                         <Redirect to="/" />

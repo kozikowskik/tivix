@@ -50,12 +50,16 @@ export default class Budget extends Component {
             budget.name,
             budget.saldo,
             budget.value,
-            [
-                this.getDeleteButton(budget),
-                this.getEditButton(budget),
-                this.getTransactionsButton(budget),
-                this.getShareButton(budget),
-            ],
+            (() => {
+                if (budget.shared === true)
+                    return [this.getTransactionsButton(budget)];
+                return [
+                    this.getDeleteButton(budget),
+                    this.getEditButton(budget),
+                    this.getTransactionsButton(budget),
+                    this.getShareButton(budget),
+                ];
+            })(),
         ]);
     }
 

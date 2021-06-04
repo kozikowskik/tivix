@@ -3,10 +3,6 @@ import PropTypes from "prop-types";
 import { Table, Spinner } from "react-bootstrap";
 
 export default class DataTable extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     showBody() {
         const colSpan = (this.props.headers || []).length;
         const rows = this.props.rows || [];
@@ -21,7 +17,7 @@ export default class DataTable extends Component {
             );
         if (rows.length === 0)
             return (
-                <tr>
+                <tr key={0}>
                     <td colSpan={colSpan}>
                         {this.props.noDataMessage
                             ? this.props.noDataMessage

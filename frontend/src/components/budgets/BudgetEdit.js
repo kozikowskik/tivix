@@ -11,9 +11,7 @@ export default class BudgetEdit extends Component {
         this.state = { pending: true, inputs: {} };
 
         this.budgetId = this.props.match.params.id;
-
         this.model = new BudgetModel();
-
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     getBudget() {

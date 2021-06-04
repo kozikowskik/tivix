@@ -22,6 +22,9 @@ class Budget(models.Model):
     def __str__(self):
         return self.name
 
+    def if_owner(self, user):
+        return self.user.pk == user.pk
+
 
 class Transaction(models.Model):
     class Type(models.TextChoices):

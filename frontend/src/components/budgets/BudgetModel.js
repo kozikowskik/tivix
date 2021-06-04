@@ -7,18 +7,18 @@ export default class BudgetModel extends BaseModel {
     }
 
     getTransactions(id, success = null, error = null) {
-        API.get(`${this.url}/${id}/transactions`)
-            .then((res) => {
-                if (!(typeof success === "function")) {
-                    return false;
-                }
-                success.apply(this, [res]);
-            })
-            .catch((res) => {
-                if (!(typeof error === "function")) {
-                    return false;
-                }
-                error.apply(this, [res]);
-            });
+        return this.addResponseHandlers(
+            API.get(`${this.url}/${id}/transactions`),
+            success,
+            error
+        );
+    }
+
+    shareWith(budgetsId, data, success = null, error = null) {
+        return this.addResponseHandlers(
+            API.post(`${this.url}/${budgetsId}/share`, data),
+            success,
+            error
+        );
     }
 }
