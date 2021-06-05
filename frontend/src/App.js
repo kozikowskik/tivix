@@ -11,7 +11,6 @@ import PrivateRoute from "./routers/privateRoute.router.js";
 
 import Login from "./components/Login.js";
 import Logout from "./components/Logout.js";
-import Dashboard from "./components/dashboard/Dashboard.js";
 
 import BudgetsList from "./components/budgets/BudgetsList.js";
 import BudgetAdd from "./components/budgets/BudgetAdd.js";
@@ -57,16 +56,9 @@ export default class App extends Component {
                             render={(props) => (
                                 <LoginWithForm
                                     {...props}
-                                    successUrl={"/dashboard"}
+                                    successUrl={"/budgets"}
                                 />
                             )}
-                        />
-                        <PrivateRoute
-                            exact
-                            authed={isAuthenticated()}
-                            settings={this.settings}
-                            path="/dashboard"
-                            component={Dashboard}
                         />
 
                         <PrivateRoute
