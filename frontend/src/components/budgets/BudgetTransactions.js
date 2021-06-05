@@ -32,7 +32,7 @@ export default class BudgetTransactions extends Component {
         this.budgetId = this.props.match.params.id;
 
         this.budgetModel = new BudgetModel();
-        this.transactionModel = new TransactionModel(this.budgetId);
+        this.transactionModel = new TransactionModel();
         this.categoriesModel = new CategoryModel();
 
         this.getBudget = this.getBudget.bind(this);
