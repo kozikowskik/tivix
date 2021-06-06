@@ -41,27 +41,24 @@ export default class BudgetAdd extends Component {
     render() {
         return (
             <>
-                <Navigation />
-                <Container className="mt-4">
-                    <Row>
-                        <Col>
-                            <div className="text-left mb-4 h2">Add Budget</div>
-                        </Col>
-                    </Row>
-                    <BudgetForm
-                        handleChange={this.props.handleChange}
-                        handleSubmit={(e) => {
-                            this.props.handleSubmit(
-                                e,
-                                this,
-                                this.validate,
-                                this.handleSubmit
-                            );
-                        }}
-                        inputs={this.props.inputs}
-                        errors={this.props.errors}
-                    />
-                </Container>
+                <Row>
+                    <Col>
+                        <div className="text-left mb-4 h2">Add Budget</div>
+                    </Col>
+                </Row>
+                <BudgetForm
+                    handleChange={this.props.handleChange}
+                    handleSubmit={(e) => {
+                        this.props.handleSubmit(
+                            e,
+                            this,
+                            this.validate,
+                            this.handleSubmit
+                        );
+                    }}
+                    inputs={this.props.inputs}
+                    errors={this.props.errors}
+                />
             </>
         );
     }

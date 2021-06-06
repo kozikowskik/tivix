@@ -66,26 +66,21 @@ export default class BudgetAdd extends Component {
     render() {
         return (
             <>
-                <Navigation />
-                <Container className="mt-4">
-                    <Row>
-                        <Col>
-                            <div className="text-left mb-4 h2">
-                                Share Budget
-                            </div>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <BudgetShareTable
-                                pending={this.state.pending}
-                                users={this.state.users}
-                                budget={this.state.budget}
-                                handleChange={this.handleChange}
-                            />
-                        </Col>
-                    </Row>
-                </Container>
+                <Row>
+                    <Col>
+                        <div className="text-left mb-4 h2">Share Budget</div>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <BudgetShareTable
+                            pending={this.state.pending}
+                            users={this.state.users}
+                            budget={this.state.budget}
+                            handleChange={this.handleChange}
+                        />
+                    </Col>
+                </Row>
             </>
         );
     }

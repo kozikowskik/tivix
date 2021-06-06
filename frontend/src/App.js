@@ -36,8 +36,6 @@ const BudgetEditWithForm = withForm(BudgetEdit);
 const CategoryAddWithForm = withForm(CategoryAdd);
 const BudgetTransactionsWithForm = withForm(BudgetTransactions);
 
-const BudgetsListWithLayout = withLayout(BudgetsList);
-
 export default class App extends Component {
     componentWillMount() {
         this.settings = {
@@ -70,35 +68,35 @@ export default class App extends Component {
                             authed={isAuthenticated()}
                             settings={this.settings}
                             path="/budgets"
-                            component={BudgetsListWithLayout}
+                            component={withLayout(BudgetsList)}
                         />
                         <PrivateRoute
                             exact
                             authed={isAuthenticated()}
                             settings={this.settings}
                             path="/budgets/add"
-                            component={BudgetAddWithForm}
+                            component={withLayout(BudgetAddWithForm)}
                         />
                         <PrivateRoute
                             exact
                             authed={isAuthenticated()}
                             settings={this.settings}
                             path="/budgets/:id/edit/"
-                            component={BudgetEditWithForm}
+                            component={withLayout(BudgetEditWithForm)}
                         />
                         <PrivateRoute
                             exact
                             authed={isAuthenticated()}
                             settings={this.settings}
                             path="/budgets/:id/transactions"
-                            component={BudgetTransactionsWithForm}
+                            component={withLayout(BudgetTransactionsWithForm)}
                         />
                         <PrivateRoute
                             exact
                             authed={isAuthenticated()}
                             settings={this.settings}
                             path="/budgets/:id/share"
-                            component={BudgetShare}
+                            component={withLayout(BudgetShare)}
                         />
 
                         <PrivateRoute

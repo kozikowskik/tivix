@@ -124,40 +124,35 @@ export default class BudgetTransactions extends Component {
     render() {
         return (
             <>
-                <Navigation />
-                <Container className="mt-4">
-                    <Saldo budget={this.state.budget} />
-                    <Row>
-                        <Col>
-                            <div className="text-left mb-4 h2">
-                                Add Transaction
-                            </div>
-                        </Col>
-                    </Row>
-                    <TransactionForm
-                        disabled={this.state.budget.shared}
-                        handleChange={this.props.handleChange}
-                        handleSubmit={(e) => {
-                            this.props.handleSubmit(
-                                e,
-                                this,
-                                this.validate,
-                                this.handleSubmit
-                            );
-                        }}
-                        categories={this.state.categories}
-                        inputs={this.props.inputs}
-                        errors={this.props.errors}
-                    />
-                    <Row className="mt-4">
-                        <Col>
-                            <TransactionTable
-                                pending={this.props.transactionsPending}
-                                transactions={this.state.transactions}
-                            />
-                        </Col>
-                    </Row>
-                </Container>
+                <Saldo budget={this.state.budget} />
+                <Row>
+                    <Col>
+                        <div className="text-left mb-4 h2">Add Transaction</div>
+                    </Col>
+                </Row>
+                <TransactionForm
+                    disabled={this.state.budget.shared}
+                    handleChange={this.props.handleChange}
+                    handleSubmit={(e) => {
+                        this.props.handleSubmit(
+                            e,
+                            this,
+                            this.validate,
+                            this.handleSubmit
+                        );
+                    }}
+                    categories={this.state.categories}
+                    inputs={this.props.inputs}
+                    errors={this.props.errors}
+                />
+                <Row className="mt-4">
+                    <Col>
+                        <TransactionTable
+                            pending={this.props.transactionsPending}
+                            transactions={this.state.transactions}
+                        />
+                    </Col>
+                </Row>
             </>
         );
     }
