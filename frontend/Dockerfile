@@ -2,15 +2,9 @@ FROM node:14
 
 WORKDIR /code
 
-COPY package*.json ./
+COPY package.json .
 
-USER node
-
-RUN npm install
-
-COPY --chown=node:node . .
-
-RUN npm install
+RUN npm install --only=prod
 
 COPY . .
 
