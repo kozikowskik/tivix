@@ -123,50 +123,35 @@ export default class Budget extends Component {
     render() {
         return (
             <>
-                <Navigation />
-                <Container className="mt-4">
-                    <Row>
-                        <Col>
-                            <div className="text-left mb-4 h2">
-                                Budgets List
-                            </div>
-                        </Col>
-                        <Col className="text-right">
-                            <Button
-                                as={Link}
-                                to="/budgets/add"
-                                variant="secondary"
-                            >
-                                <Icon.Plus />
-                            </Button>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <DataTable
-                                headers={[
-                                    "#",
-                                    "Name",
-                                    "Saldo",
-                                    "Value",
-                                    "Actions",
-                                ]}
-                                rows={this.state.budgets}
-                                pending={this.state.pending}
-                                noDataMessage={"Add your first budget."}
-                            />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <PaginationPanel
-                                totalRecords={this.state.totalRecords}
-                                pageLimit={this.props.settings.PAGE_SIZE}
-                                onPageChanged={this.onPageChanged}
-                            />
-                        </Col>
-                    </Row>
-                </Container>
+                <Row>
+                    <Col>
+                        <div className="text-left mb-4 h2">Budgets List</div>
+                    </Col>
+                    <Col className="text-right">
+                        <Button as={Link} to="/budgets/add" variant="secondary">
+                            <Icon.Plus />
+                        </Button>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <DataTable
+                            headers={["#", "Name", "Saldo", "Value", "Actions"]}
+                            rows={this.state.budgets}
+                            pending={this.state.pending}
+                            noDataMessage={"Add your first budget."}
+                        />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <PaginationPanel
+                            totalRecords={this.state.totalRecords}
+                            pageLimit={this.props.settings.PAGE_SIZE}
+                            onPageChanged={this.onPageChanged}
+                        />
+                    </Col>
+                </Row>
             </>
         );
     }

@@ -21,7 +21,9 @@ import BudgetShare from "./components/budgets/BudgetShare.js";
 import CategoryList from "./components/categories/CategoryList.js";
 import CategoryAdd from "./components/categories/CategoryAdd.js";
 import API from "./api.js";
+
 import withForm from "./components/withForm.js";
+import withLayout from "./components/withLayout.js";
 
 function isAuthenticated() {
     let jwtAccessToken = localStorage.getItem("jwtAccessToken");
@@ -33,6 +35,8 @@ const BudgetAddWithForm = withForm(BudgetAdd);
 const BudgetEditWithForm = withForm(BudgetEdit);
 const CategoryAddWithForm = withForm(CategoryAdd);
 const BudgetTransactionsWithForm = withForm(BudgetTransactions);
+
+const BudgetsListWithLayout = withLayout(BudgetsList);
 
 export default class App extends Component {
     componentWillMount() {
@@ -66,7 +70,7 @@ export default class App extends Component {
                             authed={isAuthenticated()}
                             settings={this.settings}
                             path="/budgets"
-                            component={BudgetsList}
+                            component={BudgetsListWithLayout}
                         />
                         <PrivateRoute
                             exact
