@@ -37,45 +37,38 @@ export default class CategoryAdd extends Component {
     render() {
         return (
             <>
-                <Navigation />
-                <Container className="mt-4">
+                <Row>
+                    <Col>
+                        <div className="text-left mb-4 h2">Add Category</div>
+                    </Col>
+                </Row>
+                <Form
+                    noValidate
+                    method="post"
+                    onSubmit={(e) => {
+                        this.props.handleSubmit(
+                            e,
+                            this,
+                            this.validate,
+                            this.handleSubmit
+                        );
+                    }}
+                >
                     <Row>
                         <Col>
-                            <div className="text-left mb-4 h2">
-                                Add Category
-                            </div>
+                            <Form.Control
+                                name="name"
+                                placeholder="Name"
+                                value={this.props.inputs.name}
+                                onChange={this.props.handleChange}
+                            />
+                            <FormFieldErrors errors={this.props.errors.name} />
+                        </Col>
+                        <Col className="text-left">
+                            <Button type="submit">Submit</Button>
                         </Col>
                     </Row>
-                    <Form
-                        noValidate
-                        method="post"
-                        onSubmit={(e) => {
-                            this.props.handleSubmit(
-                                e,
-                                this,
-                                this.validate,
-                                this.handleSubmit
-                            );
-                        }}
-                    >
-                        <Row>
-                            <Col>
-                                <Form.Control
-                                    name="name"
-                                    placeholder="Name"
-                                    value={this.props.inputs.name}
-                                    onChange={this.props.handleChange}
-                                />
-                                <FormFieldErrors
-                                    errors={this.props.errors.name}
-                                />
-                            </Col>
-                            <Col className="text-left">
-                                <Button type="submit">Submit</Button>
-                            </Col>
-                        </Row>
-                    </Form>
-                </Container>
+                </Form>
             </>
         );
     }

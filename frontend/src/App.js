@@ -104,14 +104,14 @@ export default class App extends Component {
                             authed={isAuthenticated()}
                             settings={this.settings}
                             path="/categories"
-                            component={CategoryList}
+                            component={withLayout(CategoryList)}
                         />
                         <PrivateRoute
                             exact
                             authed={isAuthenticated()}
                             settings={this.settings}
                             path="/categories/add"
-                            component={CategoryAddWithForm}
+                            component={withLayout(CategoryAddWithForm)}
                         />
 
                         <PrivateRoute
