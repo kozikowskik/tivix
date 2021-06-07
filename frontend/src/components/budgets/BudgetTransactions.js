@@ -1,16 +1,12 @@
 import React, { Component } from "react";
-import { Container, Col, Row } from "react-bootstrap";
-
-import Navigation from "../Navigation.js";
-
+import { Col, Row } from "react-bootstrap";
 import TransactionTable from "../transactions/TransactionTable.js";
 import Saldo from "./Saldo.js";
-
 import BudgetModel from "./BudgetModel.js";
 import TransactionModel from "../transactions/TransactionModel.js";
-
 import TransactionForm from "../transactions/TransactionForm.js";
 import CategoryModel from "../categories/CategoryModel.js";
+import PaginationPanel from "../PaginationPanel.js";
 
 export default class BudgetTransactions extends Component {
     constructor(props) {
@@ -41,6 +37,7 @@ export default class BudgetTransactions extends Component {
 
         this.validate = this.validate.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.onPageChanged = this.onPageChanged.bind(this);
     }
 
     componentDidMount() {
@@ -65,12 +62,18 @@ export default class BudgetTransactions extends Component {
             this.setState({ categories: res.data.results });
         });
     }
-    getTransactions() {
+    getTransactions(page = null) {
+        let data = {};
+
+        if (page) {
+            data = { params: { page } };
+        }
         if (this.state.transactionsPending !== true) {
             this.setState({ transactionsPending: true });
         }
-        this.budgetModel.getTransactions(this.budgetId, (res) => {
+        this.budgetModel.getTransactions(this.budgetId, data, (res) => {
             this.setState({
+                totalRecords: res.data.count,
                 transactions: res.data.results,
                 transactionsPending: false,
             });
@@ -121,6 +124,10 @@ export default class BudgetTransactions extends Component {
             }
         );
     }
+    onPageChanged(data) {
+        const { currentPage = 1 } = data;
+        this.getTransactions(currentPage);
+    }
     render() {
         return (
             <>
@@ -150,6 +157,15 @@ export default class BudgetTransactions extends Component {
                         <TransactionTable
                             pending={this.props.transactionsPending}
                             transactions={this.state.transactions}
+                        />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <PaginationPanel
+                            totalRecords={this.state.totalRecords}
+                            pageLimit={this.props.settings.PAGE_SIZE}
+                            onPageChanged={this.onPageChanged}
                         />
                     </Col>
                 </Row>

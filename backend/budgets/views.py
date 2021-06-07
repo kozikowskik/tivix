@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
-from django.shortcuts import render
 from django.db.models import Q
-from django.db.models import Case, When, Value, IntegerField, BooleanField
+from django.db.models import Case, When, Value
 
 from rest_framework import status
 from rest_framework import viewsets
@@ -63,14 +62,14 @@ class BudgetViewSet(viewsets.ModelViewSet):
         serializer.save(saldo=serializer.validated_data["value"])
 
     @action(detail=True, methods=["get"])
-    def transactions(self, request, pk=None):
+    def transactions(self, request, pk=None):  # noqa: unused-argument
         budget = self.get_object()
         data = self.paginate_queryset(budget.transaction_set.all())
         serializer = TransactionSerializer(data, many=True)
         return self.get_paginated_response(serializer.data)
 
     @action(detail=True, methods=["post"])
-    def share(self, request, pk=None):
+    def share(self, request, pk=None):  # noqa: unused-argument
         budget = self.get_object()
         if not budget.is_owner(request.user):
             return Response(

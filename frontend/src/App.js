@@ -20,7 +20,6 @@ import BudgetShare from "./components/budgets/BudgetShare.js";
 
 import CategoryList from "./components/categories/CategoryList.js";
 import CategoryAdd from "./components/categories/CategoryAdd.js";
-import API from "./api.js";
 
 import withForm from "./components/withForm.js";
 import withLayout from "./components/withLayout.js";
@@ -38,13 +37,13 @@ const BudgetTransactionsWithForm = withForm(BudgetTransactions);
 
 export default class App extends Component {
     componentWillMount() {
-        this.settings = {
-            PAGE_SIZE: 10,
-        };
         //(async () => {
         //    const resp = await API.get("/api/settings");
         //    this.settings = resp.data;
         //})();
+        this.settings = {
+            PAGE_SIZE: 10,
+        };
     }
     render() {
         return (
@@ -54,7 +53,6 @@ export default class App extends Component {
                         <Route
                             exact
                             path="/"
-                            exact
                             render={(props) => (
                                 <LoginWithForm
                                     {...props}

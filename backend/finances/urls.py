@@ -20,7 +20,9 @@ router.register("users", UserViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path(
+        "api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"
+    ),
     path("api/", include(router.urls)),
     path("api/settings", settings_view),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

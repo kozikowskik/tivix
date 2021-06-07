@@ -14,7 +14,9 @@ class Budget(models.Model):
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    shared_with = models.ManyToManyField(User, related_name="shared_with_users")
+    shared_with = models.ManyToManyField(
+        User, related_name="shared_with_users"
+    )
 
     class Meta:
         ordering = ["-pk"]
@@ -49,4 +51,6 @@ class Transaction(models.Model):
         return self.name
 
     def get_saldo_value(self):
-        return (1 if self.transaction_type == self.Type.INCOME else -1) * self.value
+        return (
+            1 if self.transaction_type == self.Type.INCOME else -1
+        ) * self.value

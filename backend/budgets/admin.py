@@ -16,8 +16,8 @@ class BudgetAdminForm(forms.ModelForm):
 class BudgetAdmin(admin.ModelAdmin):
     form = BudgetAdminForm
 
-    def get_form(self, request, *args, **kwargs):
-        form = super().get_form(request, *args, **kwargs)
+    def get_form(self, request, obj=None, change=False, **kwargs):
+        form = super().get_form(request, obj, change, **kwargs)
         form.user = request.user
         return form
 

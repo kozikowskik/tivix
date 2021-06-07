@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { Container, Col, Row, Button, Form } from "react-bootstrap";
+import { Col, Row, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import Navigation from "../Navigation.js";
-import PaginationPanel from "../PaginationPanel.js";
 import * as Icon from "react-bootstrap-icons";
+import PaginationPanel from "../PaginationPanel.js";
 import DataTable from "../DataTable.js";
 import CategoryModel from "./CategoryModel.js";
 

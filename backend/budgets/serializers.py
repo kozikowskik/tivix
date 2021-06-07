@@ -1,5 +1,7 @@
-from django.contrib.auth.models import User
+from decimal import Decimal
+
 from rest_framework import serializers
+from djmoney.contrib.django_rest_framework import MoneyField
 
 from .models import Budget, Transaction
 
@@ -10,7 +12,15 @@ class BudgetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Budget
-        fields = ("id", "name", "user", "value", "saldo", "shared_with", "shared")
+        fields = (
+            "id",
+            "name",
+            "user",
+            "value",
+            "saldo",
+            "shared_with",
+            "shared",
+        )
         read_only_fields = ("shared_with", "shared")
 
     def get_shared(self, obj):
@@ -22,6 +32,11 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     category_name = serializers.SerializerMethodField()
     transaction_type_name = serializers.SerializerMethodField()
+    value = MoneyField(
+        max_digits=14,
+        decimal_places=2,
+    )
+    signed_value = serializers.SerializerMethodField()
 
     class Meta:
         model = Transaction
@@ -36,6 +51,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             "category_name",
             "transaction_type_name",
             "created_at",
+            "signed_value",
         ]
 
     def get_category_name(self, obj):
@@ -43,3 +59,8 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     def get_transaction_type_name(self, obj):
         return obj.get_transaction_type_display()
+
+    def get_signed_value(self, obj):
+        return (1 if obj.transaction_type == Transaction.Type.INCOME else -1) * Decimal(
+            obj.value.amount
+        )

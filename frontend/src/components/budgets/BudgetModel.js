@@ -6,9 +6,9 @@ export default class BudgetModel extends BaseModel {
         super("/api/budgets");
     }
 
-    getTransactions(id, success = null, error = null) {
+    getTransactions(id, data, success = null, error = null) {
         return this.addResponseHandlers(
-            API.get(`${this.url}/${id}/transactions`),
+            API.get(`${this.url}/${id}/transactions`, data),
             success,
             error
         );

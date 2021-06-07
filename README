@@ -1,0 +1,16 @@
+Do run application on OS should be installed:
+    # python3
+    # docker
+    # docker-compose
+
+
+To run application please make sure that ./run.sh have execution rights.
+
+To prepare application run:
+
+./run.sh install && ./run.sh run
+
+Default user is admin/admin, additional users can be created by django-admin available on
+http://localhost:8000/admin/.
+
+

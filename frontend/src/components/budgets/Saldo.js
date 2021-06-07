@@ -26,7 +26,6 @@ export default class Saldo extends Component {
         value = parseFloat(value);
 
         let arrow = null;
-        console.log(typeof saldo, typeof value);
         if (saldo === value) {
             arrow = <Icon.ArrowDownUp />;
         } else if (saldo < value) {

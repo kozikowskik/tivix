@@ -11,6 +11,11 @@ import {
 import API from "../api.js";
 
 export default class Login extends Component {
+    constructor(props) {
+        super(props);
+
+        this.successUrl = props.successUrl || "/budgets";
+    }
     handleSubmit(event) {
         const { username } = this.props.inputs;
         API.post("/api/token/", {
@@ -21,6 +26,7 @@ export default class Login extends Component {
                 localStorage.setItem("jwtAccessToken", res.data.access);
                 localStorage.setItem("jwtRefreshToken", res.data.refresh);
                 localStorage.setItem("username", username);
+
                 this.props.history.push(this.props.successUrl);
             })
             .catch((res) => {

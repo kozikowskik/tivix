@@ -8,40 +8,76 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('categories', '0003_remove_category_type'),
+        ("categories", "0003_remove_category_type"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('budgets', '0003_auto_20210531_0843'),
+        ("budgets", "0003_auto_20210531_0843"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Transaction',
+            name="Transaction",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('amount', models.DecimalField(decimal_places=2, max_digits=8)),
-                ('transaction_type', models.CharField(choices=[('income', 'Income'), ('expense', 'Expense')], default='income', max_length=7)),
-                ('budget', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='budgets.budget')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='categories.category')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                (
+                    "amount",
+                    models.DecimalField(decimal_places=2, max_digits=8),
+                ),
+                (
+                    "transaction_type",
+                    models.CharField(
+                        choices=[("income", "Income"), ("expense", "Expense")],
+                        default="income",
+                        max_length=7,
+                    ),
+                ),
+                (
+                    "budget",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="budgets.budget",
+                    ),
+                ),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="categories.category",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.RemoveField(
-            model_name='income',
-            name='budget',
+            model_name="income",
+            name="budget",
         ),
         migrations.RemoveField(
-            model_name='income',
-            name='category',
+            model_name="income",
+            name="category",
         ),
         migrations.RemoveField(
-            model_name='income',
-            name='user',
+            model_name="income",
+            name="user",
         ),
         migrations.DeleteModel(
-            name='Expense',
+            name="Expense",
         ),
         migrations.DeleteModel(
-            name='Income',
+            name="Income",
         ),
     ]

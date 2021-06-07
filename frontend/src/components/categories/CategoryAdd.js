@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Container, Col, Row, Button, Form } from "react-bootstrap";
-import Navigation from "../Navigation.js";
+import { Col, Row, Button, Form } from "react-bootstrap";
 import FormFieldErrors from "../FormFieldErrors.js";
 import CategoryModel from "./CategoryModel.js";
 

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import DataTable from "../DataTable.js";
-import API from "../../api.js";
 import Moment from "react-moment";
 
 export default class TransactionTable extends Component {
@@ -12,7 +11,7 @@ export default class TransactionTable extends Component {
         return (this.props.transactions || []).map((transaction, index) => [
             index + 1,
             transaction.name,
-            transaction.value,
+            transaction.signed_value,
             transaction.category_name,
             transaction.transaction_type_name,
             <Moment format="YYYY/MM/DD HH:mm:ss">
