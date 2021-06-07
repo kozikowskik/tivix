@@ -22,7 +22,8 @@ def display_output(command):
 
 
 def install(args):
-    #shutil.move("env.example", "env")
+    shutil.move("env.example", "env")
+    shutil.move("docker-compose.override.yml.example", "docker-compose.override.yml")
 
     command = subprocess.run(
         ["docker-compose", "build", "--force-rm"], capture_output=True
@@ -51,6 +52,8 @@ def install(args):
 
 def run(args):
     command = subprocess.run(["docker-compose", "up", "-d"], capture_output=True)
+    display_output(command)
+    command = subprocess.run(["docker-compose", "logs", "-f", "--tail=10"], capture_output=True)
     display_output(command)
 
 
