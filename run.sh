@@ -53,8 +53,6 @@ def install(args):
 def run(args):
     command = subprocess.run(["docker-compose", "up", "-d"], capture_output=True)
     display_output(command)
-    command = subprocess.run(["docker-compose", "logs", "-f", "--tail=10"], capture_output=True)
-    display_output(command)
 
 
 if __name__ == "__main__":
